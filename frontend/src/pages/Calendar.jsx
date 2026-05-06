@@ -29,7 +29,7 @@ function addDays(dateStr, n) {
   return d.toISOString().slice(0, 10);
 }
 
-const SHORT_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const SHORT_DAYS = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
 function statusStyle(assignment, dayStr) {
   const today = new Date().toISOString().slice(0, 10);
@@ -131,7 +131,7 @@ export default function Calendar() {
       }
       setAssignments(byDay);
     } catch (err) {
-      setError(err.message || 'Failed to load calendar');
+      setError(err.message || 'Не удалось загрузить календарь');
     } finally {
       setLoading(false);
     }
@@ -168,7 +168,7 @@ export default function Calendar() {
 
   const submitTrade = async () => {
     if (!selectedKid) {
-      setTradeError('Select a hero to trade with');
+      setTradeError('Выберите героя для обмена');
       return;
     }
     setTradeSubmitting(true);
@@ -184,7 +184,7 @@ export default function Calendar() {
       setTradeModal(false);
       fetchCalendar();
     } catch (err) {
-      setTradeError(err.message || 'Trade failed');
+      setTradeError(err.message || 'Ошибка обмена');
     } finally {
       setTradeSubmitting(false);
     }
@@ -198,7 +198,7 @@ export default function Calendar() {
       await api(`/api/calendar/assignments/${assignmentId}${qs}`, { method: 'DELETE' });
       fetchCalendar();
     } catch (err) {
-      setError(err.message || 'Failed to remove quest');
+      setError(err.message || 'Не удалось удалить квест');
     } finally {
       setRemovingId(null);
     }
@@ -209,10 +209,10 @@ export default function Calendar() {
     setCleanMsg('');
     try {
       const data = await api('/api/chores/cleanup-all-stale', { method: 'POST' });
-      setCleanMsg(data.message || 'Cleanup complete');
+      setCleanMsg(data.message || 'Очистка завершена');
       fetchCalendar();
     } catch (err) {
-      setError(err.message || 'Cleanup failed');
+      setError(err.message || 'Ошибка очистки');
     } finally {
       setCleaning(false);
     }
@@ -231,7 +231,7 @@ export default function Calendar() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
         <h1 className="text-cream text-lg font-semibold">
-          Calendar
+          Календарь
         </h1>
 
         {/* Week navigation */}
@@ -240,7 +240,7 @@ export default function Calendar() {
             <button
               onClick={prevWeek}
               className="p-2 rounded hover:bg-surface-raised transition-colors text-muted hover:text-cream"
-              aria-label="Previous week"
+              aria-label="Предыдущая неделя"
             >
               <ChevronLeft size={20} />
             </button>
@@ -252,7 +252,7 @@ export default function Calendar() {
             <button
               onClick={nextWeek}
               className="p-2 rounded hover:bg-surface-raised transition-colors text-muted hover:text-cream"
-              aria-label="Next 7 days"
+              aria-label="Следующие 7 дней"
             >
               <ChevronRight size={20} />
             </button>
@@ -260,7 +260,7 @@ export default function Calendar() {
 
           {!isAtToday && (
             <button onClick={goToday} className="game-btn game-btn-blue">
-              Today
+              Сегодня
             </button>
           )}
 
@@ -269,14 +269,14 @@ export default function Calendar() {
               onClick={cleanupStale}
               disabled={cleaning}
               className="game-btn game-btn-red flex items-center gap-1"
-              title="Remove all overdue pending quests and reset exclusions"
+              title="Удалить все просроченные квесты и сбросить исключения"
             >
               {cleaning ? (
                 <Loader2 size={14} className="animate-spin" />
               ) : (
                 <Trash2 size={14} />
               )}
-              Clean Up
+              Очистить
             </button>
           )}
         </div>
@@ -338,7 +338,7 @@ export default function Calendar() {
                 <div className="space-y-2 mt-2 min-h-[80px]">
                   {dayAssignments.length === 0 && (
                     <p className="text-muted text-xs text-center py-4">
-                      No quests
+                      Нет квестов
                     </p>
                   )}
                   {dayAssignments.map((a) => {
@@ -359,7 +359,7 @@ export default function Calendar() {
                                 style.textClass || 'text-cream'
                               }`}
                             >
-                              {themedTitle(a.chore?.title || a.chore_title || 'Quest', colorTheme)}
+                              {themedTitle(a.chore?.title || a.chore_title || 'Задание', colorTheme)}
                             </p>
                             {/* Show assigned kid for parents */}
                             {!isKid && (a.user?.display_name || a.assigned_to_name) && (
@@ -380,7 +380,7 @@ export default function Calendar() {
                             className="mt-1.5 flex items-center gap-1 text-xs font-medium text-accent hover:text-accent/80 transition-colors"
                           >
                             <ArrowRightLeft size={12} />
-                            Trade
+                            Обмен
                           </button>
                         )}
 
@@ -404,7 +404,7 @@ export default function Calendar() {
                             ) : (
                               <X size={12} />
                             )}
-                            Remove
+                            Удалить
                           </button>
                         )}
                       </div>
@@ -423,7 +423,7 @@ export default function Calendar() {
         Object.values(assignments).every((arr) => arr.length === 0) && (
           <div className="text-center py-16">
             <p className="text-muted text-sm">
-              No tasks scheduled this week.
+              Нет задач на эту неделю.
             </p>
           </div>
         )}
@@ -432,15 +432,15 @@ export default function Calendar() {
       <Modal
         isOpen={tradeModal}
         onClose={() => setTradeModal(false)}
-        title="Propose a Trade"
+        title="Предложить обмен"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setTradeModal(false),
             className: 'game-btn game-btn-red',
           },
           {
-            label: tradeSubmitting ? 'Sending...' : 'Send Trade',
+            label: tradeSubmitting ? 'Отправка...' : 'Отправить предложение',
             onClick: submitTrade,
             className: 'game-btn game-btn-blue',
             disabled: tradeSubmitting || !selectedKid,
@@ -449,11 +449,11 @@ export default function Calendar() {
       >
         <div className="space-y-4">
           <p className="text-muted text-sm">
-            Trade{' '}
+            Обменять{' '}
             <span className="text-cream font-medium">
-              {themedTitle(tradeAssignment?.chore?.title || tradeAssignment?.chore_title || 'Quest', colorTheme)}
+              «{themedTitle(tradeAssignment?.chore?.title || tradeAssignment?.chore_title || 'Квест', colorTheme)}»
             </span>{' '}
-            with another member:
+            с другим участником:
           </p>
 
           {tradeError && (
@@ -464,7 +464,7 @@ export default function Calendar() {
 
           {familyKids.length === 0 ? (
             <p className="text-muted text-sm">
-              No other members found in your family.
+              Другие участники семьи не найдены.
             </p>
           ) : (
             <div className="space-y-2">
@@ -492,20 +492,20 @@ export default function Calendar() {
       <Modal
         isOpen={!!removeTarget}
         onClose={() => setRemoveTarget(null)}
-        title="Remove Recurring Quest"
+        title="Удалить повторяющийся квест"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setRemoveTarget(null),
             className: 'game-btn game-btn-blue',
           },
           {
-            label: 'Just This One',
+            label: 'Только этот',
             onClick: () => removeAssignment(removeTarget?.id, false),
             className: 'game-btn game-btn-red',
           },
           {
-            label: 'All Future',
+            label: 'Все будущие',
             onClick: () => removeAssignment(removeTarget?.id, true),
             className: 'game-btn game-btn-red',
           },
@@ -513,10 +513,9 @@ export default function Calendar() {
       >
         <p className="text-muted text-sm">
           <span className="text-cream font-bold">
-            {themedTitle(removeTarget?.chore?.title || 'Quest', colorTheme)}
+            {themedTitle(removeTarget?.chore?.title || 'Задание', colorTheme)}
           </span>{' '}
-          is recurring{removeTarget?.user?.display_name ? ` for ${removeTarget.user.display_name}` : ''}.
-          Remove just this instance, or all future pending instances?
+          является повторяющимся{removeTarget?.user?.display_name ? ` для ${removeTarget.user.display_name}` : ''}. Удалить только этот или все будущие?
         </p>
       </Modal>
     </div>

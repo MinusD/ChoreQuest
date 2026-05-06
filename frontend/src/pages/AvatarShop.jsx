@@ -37,15 +37,15 @@ const RARITY_BADGE = {
 };
 
 const CATEGORY_LABELS = {
-  head: 'Head',
-  hair: 'Hair',
-  eyes: 'Eyes',
-  mouth: 'Mouth',
-  hat: 'Hats',
-  accessory: 'Gear',
-  face_extra: 'Face',
-  outfit_pattern: 'Pattern',
-  pet: 'Pets',
+  head: 'Голова',
+  hair: 'Волосы',
+  eyes: 'Глаза',
+  mouth: 'Рот',
+  hat: 'Шляпы',
+  accessory: 'Снаряжение',
+  face_extra: 'Лицо',
+  outfit_pattern: 'Узор',
+  pet: 'Питомцы',
 };
 
 const CATEGORY_ORDER = ['hat', 'pet', 'accessory', 'hair', 'eyes', 'mouth', 'face_extra', 'outfit_pattern', 'head'];
@@ -55,13 +55,13 @@ function unlockLabel(item) {
     case 'shop':
       return `${item.unlock_value} XP`;
     case 'xp':
-      return `Earn ${item.unlock_value} XP`;
+      return `Наберите ${item.unlock_value} XP`;
     case 'streak':
-      return `${item.unlock_value}-day streak`;
+      return `${item.unlock_value}-дневная серия`;
     case 'quest_drop':
-      return 'Quest drop';
+      return 'Выпадает в заданиях';
     default:
-      return 'Free';
+      return 'Бесплатно';
   }
 }
 
@@ -114,10 +114,10 @@ export default function AvatarShop() {
     try {
       const res = await api(`/api/avatar/items/${item.id}/purchase`, { method: 'POST' });
       updateUser({ points_balance: res.points_balance });
-      setMessage(`Unlocked ${item.display_name}!`);
+      setMessage(`Открыто: ${item.display_name}!`);
       await fetchItems();
     } catch (err) {
-      setMessage(err.message || 'Purchase failed');
+      setMessage(err.message || 'Покупка не удалась');
     } finally {
       setPurchasing(null);
       setTimeout(() => setMessage(''), 3000);
@@ -151,11 +151,11 @@ export default function AvatarShop() {
       {isParent ? (
         <div className="game-panel p-3 flex items-center gap-2 text-emerald text-sm">
           <Check size={16} />
-          <span className="font-medium">All avatar items are unlocked for parents.</span>
+          <span className="font-medium">Для родителей все предметы аватара открыты.</span>
         </div>
       ) : (
         <div className="game-panel p-3 flex items-center justify-between">
-          <span className="text-cream text-sm font-medium">Your XP</span>
+          <span className="text-cream text-sm font-medium">Ваш XP</span>
           <span className="flex items-center gap-1 text-gold text-sm font-bold">
             <Coins size={14} />
             {userXp}
@@ -165,7 +165,7 @@ export default function AvatarShop() {
 
       {message && (
         <div className={`p-2 rounded border text-sm ${
-          message.includes('Unlocked') ? 'border-emerald/40 bg-emerald/10 text-emerald' : 'border-crimson/40 bg-crimson/10 text-crimson'
+          message.includes('Открыто') ? 'border-emerald/40 bg-emerald/10 text-emerald' : 'border-crimson/40 bg-crimson/10 text-crimson'
         }`}>
           {message}
         </div>
@@ -179,7 +179,7 @@ export default function AvatarShop() {
             filter === 'all' ? 'border-accent bg-accent/15 text-accent' : 'border-border text-muted hover:text-cream'
           }`}
         >
-          All
+          Все
         </button>
         {CATEGORY_ORDER.map((cat) => {
           const hasItems = unlockableItems.some((i) => i.category === cat);
@@ -238,7 +238,7 @@ export default function AvatarShop() {
                     {owned ? (
                       <div className="flex items-center gap-1 text-emerald text-xs font-medium">
                         <Check size={12} />
-                        Owned
+                        Куплено
                       </div>
                     ) : item.unlock_method === 'shop' ? (
                       <button
@@ -255,15 +255,15 @@ export default function AvatarShop() {
                         ) : (
                           <ShoppingBag size={12} />
                         )}
-                        {isBuying ? 'Buying...' : `Buy · ${item.unlock_value} XP`}
+                        {isBuying ? 'Покупка...' : `Купить · ${item.unlock_value} XP`}
                       </button>
                     ) : (
                       <div className="flex items-center gap-1 text-muted text-xs">
                         <Lock size={12} />
-                        {item.unlock_method === 'quest_drop' ? 'Find in quests' :
-                         item.unlock_method === 'xp' ? `Earn ${item.unlock_value} total XP` :
-                         item.unlock_method === 'streak' ? `${item.unlock_value}-day streak` :
-                         'Locked'}
+                        {item.unlock_method === 'quest_drop' ? 'Найдите в заданиях' :
+                         item.unlock_method === 'xp' ? `Наберите всего ${item.unlock_value} XP` :
+                         item.unlock_method === 'streak' ? `${item.unlock_value}-дневная серия` :
+                         'Заблокировано'}
                       </div>
                     )}
                   </div>
@@ -277,7 +277,7 @@ export default function AvatarShop() {
       {Object.keys(grouped).length === 0 && (
         <div className="text-center py-12 text-muted">
           <Sparkles size={32} className="mx-auto mb-3 opacity-40" />
-          <p className="text-sm">No items in this category.</p>
+          <p className="text-sm">В этой категории нет предметов.</p>
         </div>
       )}
     </div>

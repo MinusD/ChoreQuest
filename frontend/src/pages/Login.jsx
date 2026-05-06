@@ -57,18 +57,18 @@ export default function Login() {
     setError('');
 
     if (!username.trim()) {
-      setError('Username is required');
+      setError('Введите имя пользователя');
       return;
     }
 
     if (usePinMode) {
       const pinStr = pin.join('');
       if (pinStr.length !== 6) {
-        setError('Enter all 6 PIN digits');
+        setError('Введите все 6 цифр ПИН-кода');
         return;
       }
     } else if (!password) {
-      setError('Password is required');
+      setError('Введите пароль');
       return;
     }
 
@@ -81,7 +81,7 @@ export default function Login() {
       }
       navigate('/');
     } catch (err) {
-      setError(err?.message || 'Login failed. Check your credentials.');
+      setError(err?.message || 'Ошибка входа. Проверьте данные.');
     } finally {
       setSubmitting(false);
     }
@@ -113,13 +113,13 @@ export default function Login() {
         {/* Username */}
         <div className="mb-3">
           <label className="block text-cream text-sm font-medium mb-1">
-            Username
+            Имя пользователя
           </label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            placeholder="Введите имя пользователя"
             autoComplete="username"
             className="field-input"
           />
@@ -127,7 +127,7 @@ export default function Login() {
 
         {/* Mode toggle */}
         <div className="flex items-center justify-between mb-3">
-          <span className="text-muted text-sm">Login with:</span>
+          <span className="text-muted text-sm">Войти с:</span>
           <button
             type="button"
             onClick={() => {
@@ -152,7 +152,7 @@ export default function Login() {
               />
             </div>
             <span className={`font-medium ${usePinMode ? 'text-accent' : 'text-muted'}`}>
-              {usePinMode ? 'PIN' : 'Password'}
+              {usePinMode ? 'ПИН' : 'Пароль'}
             </span>
           </button>
         </div>
@@ -161,13 +161,13 @@ export default function Login() {
         {!usePinMode && (
           <div className="mb-5">
             <label className="block text-cream text-sm font-medium mb-1">
-              Password
+              Пароль
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Введите пароль"
               autoComplete="current-password"
               className="field-input"
             />
@@ -178,7 +178,7 @@ export default function Login() {
         {usePinMode && (
           <div className="mb-5">
             <label className="block text-cream text-sm font-medium mb-1">
-              PIN Code
+              ПИН-код
             </label>
             <div className="flex gap-2 justify-center" onPaste={handlePinPaste}>
               {pin.map((digit, i) => (
@@ -204,14 +204,14 @@ export default function Login() {
           disabled={submitting}
           className={`game-btn game-btn-blue w-full text-sm ${submitting ? 'opacity-60 cursor-wait' : ''}`}
         >
-          {submitting ? 'Signing in...' : 'Sign in'}
+          {submitting ? 'Вход...' : 'Войти'}
         </button>
 
         {/* Register link */}
         <p className="text-center mt-5 text-muted text-sm">
-          New here?{' '}
+          Новый пользователь?{' '}
           <Link to="/register" className="text-accent hover:text-accent-light font-medium transition-colors">
-            Create an account
+            Создать аккаунт
           </Link>
         </p>
       </form>

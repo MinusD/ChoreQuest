@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 
 const DIFFICULTY_LEVEL = { easy: 1, medium: 2, hard: 3, expert: 4 };
-const DIFFICULTY_LABELS = ['Trivial', 'Easy', 'Medium', 'Hard', 'Legendary'];
+const DIFFICULTY_LABELS = ['Тривиальный', 'Лёгкий', 'Средний', 'Сложный', 'Легендарный'];
 const DIFFICULTY_COLORS = [
   'text-muted',
   'text-emerald',
@@ -31,7 +31,7 @@ const DIFFICULTY_COLORS = [
   'text-purple',
   'text-gold',
 ];
-const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const DAY_NAMES = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 const CATEGORY_COLORS = {
   cleaning: 'bg-accent/20 text-accent border-accent/40',
@@ -57,7 +57,7 @@ function DifficultyStars({ level }) {
         />
       ))}
       <span className={`ml-2 text-sm ${DIFFICULTY_COLORS[num - 1] || 'text-muted'}`}>
-        {DIFFICULTY_LABELS[num - 1] || 'Unknown'}
+        {DIFFICULTY_LABELS[num - 1] || 'Неизвестно'}
       </span>
     </div>
   );
@@ -77,7 +77,7 @@ function StatusBadge({ status }) {
         styles[status] || styles.pending
       }`}
     >
-      {status || 'pending'}
+      {({'pending':'ожидает','completed':'выполнено','verified':'подтверждено','skipped':'пропущено','missed':'пропущен'})[status] || 'ожидает'}
     </span>
   );
 }
@@ -125,7 +125,7 @@ export default function ChoreDetail() {
       const data = await api(`/api/chores/${id}`);
       setChore(data);
     } catch (err) {
-      setError(err.message || 'This quest scroll could not be found.');
+      setError(err.message || 'Этот свиток задания не найден.');
     } finally {
       setLoading(false);
     }
@@ -152,10 +152,10 @@ export default function ChoreDetail() {
     setActionMessage('');
     try {
       await api(`/api/chores/${id}/complete`, { method: 'POST' });
-      setActionMessage('Quest completed! XP has been awarded to your hero.');
+      setActionMessage('Квест выполнен! Герой получил ОП.');
       await fetchChore();
     } catch (err) {
-      setActionMessage(err.message || 'Failed to complete the quest.');
+      setActionMessage(err.message || 'Не удалось завершить квест.');
     } finally {
       setActionLoading('');
     }
@@ -169,7 +169,7 @@ export default function ChoreDetail() {
         ? `/api/chores/assignments/${assignmentId}/verify`
         : `/api/chores/${id}/verify`;
       await api(path, { method: 'POST' });
-      setActionMessage('Quest verified! The hero has been rewarded.');
+      setActionMessage('Задание подтверждено! Герой получил награду.');
       await fetchChore();
     } catch (err) {
       setActionMessage(err.message || 'Verification failed.');
@@ -186,10 +186,10 @@ export default function ChoreDetail() {
         ? `/api/chores/assignments/${assignmentId}/uncomplete`
         : `/api/chores/${id}/uncomplete`;
       await api(path, { method: 'POST' });
-      setActionMessage('Quest marked as incomplete.');
+      setActionMessage('Задание отмечено как невыполненное.');
       await fetchChore();
     } catch (err) {
-      setActionMessage(err.message || 'Could not undo completion.');
+      setActionMessage(err.message || 'Не удалось отменить выполнение.');
     } finally {
       setActionLoading('');
     }
@@ -203,10 +203,10 @@ export default function ChoreDetail() {
         ? `/api/chores/assignments/${assignmentId}/skip`
         : `/api/chores/${id}/skip`;
       await api(path, { method: 'POST' });
-      setActionMessage('Quest skipped for today.');
+      setActionMessage('Задание пропущено на сегодня.');
       await fetchChore();
     } catch (err) {
-      setActionMessage(err.message || 'Could not skip the quest.');
+      setActionMessage(err.message || 'Не удалось пропустить задание.');
     } finally {
       setActionLoading('');
     }
@@ -221,9 +221,9 @@ export default function ChoreDetail() {
         body: { chore_id: parseInt(id), kid_ids: allKids.map((k) => k.id), cadence: selectedCadence },
       });
       await fetchRotation();
-      setActionMessage('Rotation created.');
+      setActionMessage('Ротация создана.');
     } catch (err) {
-      setActionMessage(err.message || 'Could not create rotation.');
+      setActionMessage(err.message || 'Не удалось создать ротацию.');
     } finally {
       setActionLoading('');
     }
@@ -235,9 +235,9 @@ export default function ChoreDetail() {
     try {
       await api(`/api/rotations/${rotation.id}/advance`, { method: 'POST' });
       await fetchRotation();
-      setActionMessage('Rotation advanced to next kid.');
+      setActionMessage('Ротация переключена на следующего ребёнка.');
     } catch (err) {
-      setActionMessage(err.message || 'Could not advance rotation.');
+      setActionMessage(err.message || 'Не удалось сдвинуть ротацию.');
     } finally {
       setActionLoading('');
     }
@@ -252,9 +252,9 @@ export default function ChoreDetail() {
         body: { cadence: newCadence },
       });
       await fetchRotation();
-      setActionMessage(`Cadence updated to ${newCadence}.`);
+      setActionMessage(`Частота обновлена: ${newCadence}.`);
     } catch (err) {
-      setActionMessage(err.message || 'Could not update cadence.');
+      setActionMessage(err.message || 'Не удалось обновить частоту.');
     } finally {
       setActionLoading('');
     }
@@ -266,9 +266,9 @@ export default function ChoreDetail() {
     try {
       await api(`/api/rotations/${rotation.id}`, { method: 'DELETE' });
       setRotation(null);
-      setActionMessage('Rotation removed.');
+      setActionMessage('Ротация удалена.');
     } catch (err) {
-      setActionMessage(err.message || 'Could not delete rotation.');
+      setActionMessage(err.message || 'Не удалось удалить ротацию.');
     } finally {
       setActionLoading('');
     }
@@ -292,11 +292,11 @@ export default function ChoreDetail() {
           className="flex items-center gap-2 text-muted hover:text-cream transition-colors mb-6"
         >
           <ArrowLeft size={18} />
-          <span className="text-sm">Back to Quest Board</span>
+          <span className="text-sm">Назад к доске заданий</span>
         </button>
         <div className="game-panel p-10 text-center">
           <XCircle size={48} className="mx-auto text-crimson mb-4" />
-          <p className="text-cream text-base font-semibold mb-2">Not Found</p>
+          <p className="text-cream text-base font-semibold mb-2">Не найдено</p>
           <p className="text-muted text-sm">{error}</p>
         </div>
       </div>
@@ -327,7 +327,7 @@ export default function ChoreDetail() {
         className="flex items-center gap-2 text-muted hover:text-cream transition-colors"
       >
         <ArrowLeft size={18} />
-        <span className="text-sm">Back to Quest Board</span>
+        <span className="text-sm">Назад к доске заданий</span>
       </button>
 
       {/* Main chore panel */}
@@ -361,14 +361,14 @@ export default function ChoreDetail() {
               <span className="text-gold text-xl">&#9733;</span>
             </div>
             <div>
-              <p className="text-muted text-xs font-medium">XP Reward</p>
+              <p className="text-muted text-xs font-medium">Награда XP</p>
               <p className="text-gold text-lg font-medium">{chore.points} XP</p>
             </div>
           </div>
 
           {/* Difficulty */}
           <div>
-            <p className="text-muted text-xs font-medium mb-1">Difficulty</p>
+            <p className="text-muted text-xs font-medium mb-1">Сложность</p>
             <DifficultyStars level={chore.difficulty || 1} />
           </div>
 
@@ -378,11 +378,11 @@ export default function ChoreDetail() {
               <Shield size={18} className="text-muted" />
             </div>
             <div>
-              <p className="text-muted text-xs font-medium">Category</p>
+              <p className="text-muted text-xs font-medium">Категория</p>
               <span
                 className={`inline-block px-2 py-0.5 rounded-md text-sm border capitalize ${categoryColorClass}`}
               >
-                {categoryName || 'General'}
+                {categoryName || 'Общее'}
               </span>
             </div>
           </div>
@@ -393,9 +393,9 @@ export default function ChoreDetail() {
               <RefreshCw size={18} className="text-muted" />
             </div>
             <div>
-              <p className="text-muted text-xs font-medium">Recurrence</p>
+              <p className="text-muted text-xs font-medium">Повторяемость</p>
               <p className="text-cream text-sm capitalize">
-                {chore.recurrence || 'Once'}
+                {chore.recurrence || 'Один раз'}
                 {chore.recurrence === 'custom' &&
                   chore.custom_days?.length > 0 && (
                     <span className="text-muted text-xs ml-1">
@@ -412,7 +412,7 @@ export default function ChoreDetail() {
           <div className="flex items-center gap-2 px-3 py-2 rounded bg-purple/10 border border-purple/30">
             <Camera size={16} className="text-purple" />
             <span className="text-purple text-xs">
-              Photo proof required upon completion
+              При выполнении требуется фото-подтверждение
             </span>
           </div>
         )}
@@ -436,7 +436,7 @@ export default function ChoreDetail() {
         <div className="game-panel p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-cream text-sm font-semibold mb-1">Today's Quest</p>
+              <p className="text-cream text-sm font-semibold mb-1">Сегодняшнее задание</p>
             </div>
             <button
               onClick={handleComplete}
@@ -446,7 +446,7 @@ export default function ChoreDetail() {
               }`}
             >
               <CheckCircle2 size={16} />
-              {actionLoading === 'complete' ? 'Completing...' : 'Complete Quest'}
+              {actionLoading === 'complete' ? 'Выполнение...' : 'Выполнить задание'}
             </button>
           </div>
         </div>
@@ -455,7 +455,7 @@ export default function ChoreDetail() {
       {/* Actions for parents */}
       {isParent && (
         <div className="game-panel p-5">
-          <p className="text-cream text-sm font-semibold mb-3">Actions</p>
+          <p className="text-cream text-sm font-semibold mb-3">Действия</p>
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => handleVerify(todayAssignment?.id)}
@@ -465,7 +465,7 @@ export default function ChoreDetail() {
               }`}
             >
               <CheckCircle2 size={14} />
-              {actionLoading === 'verify' ? 'Verifying...' : 'Verify'}
+              {actionLoading === 'verify' ? 'Подтверждение...' : 'Подтвердить'}
             </button>
             <button
               onClick={() => handleUncomplete(todayAssignment?.id)}
@@ -475,7 +475,7 @@ export default function ChoreDetail() {
               }`}
             >
               <XCircle size={14} />
-              {actionLoading === 'uncomplete' ? 'Undoing...' : 'Uncomplete'}
+              {actionLoading === 'uncomplete' ? 'Отмена...' : 'Отменить выполнение'}
             </button>
             <button
               onClick={() => handleSkip(todayAssignment?.id)}
@@ -485,7 +485,7 @@ export default function ChoreDetail() {
               }`}
             >
               <SkipForward size={14} />
-              {actionLoading === 'skip' ? 'Skipping...' : 'Skip Today'}
+              {actionLoading === 'skip' ? 'Пропуск...' : 'Пропустить сегодня'}
             </button>
           </div>
         </div>
@@ -496,7 +496,7 @@ export default function ChoreDetail() {
         <div className="game-panel p-5 space-y-3">
           <div className="flex items-center gap-2">
             <Users size={18} className="text-accent" />
-            <h2 className="text-cream text-sm font-semibold">Assigned To</h2>
+            <h2 className="text-cream text-sm font-semibold">Назначено</h2>
           </div>
           <div className="space-y-2">
             {assignmentRules.map((rule) => {
@@ -508,7 +508,7 @@ export default function ChoreDetail() {
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-cream text-sm font-medium truncate">
-                      {kid?.display_name || rule.user?.display_name || `Kid #${rule.user_id}`}
+                      {kid?.display_name || rule.user?.display_name || `Ребёнок #${rule.user_id}`}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
@@ -519,7 +519,7 @@ export default function ChoreDetail() {
                     {rule.requires_photo && (
                       <span className="text-muted text-xs flex items-center gap-1">
                         <Camera size={10} />
-                        Photo
+                        Фото
                       </span>
                     )}
                   </div>
@@ -535,23 +535,23 @@ export default function ChoreDetail() {
         <div className="game-panel p-5 space-y-3">
           <div className="flex items-center gap-2">
             <RotateCw size={18} className="text-purple" />
-            <h2 className="text-cream text-sm font-semibold">Kid Rotation</h2>
+            <h2 className="text-cream text-sm font-semibold">Ротация детей</h2>
           </div>
 
           {rotation ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted">Cadence:</span>
+                <span className="text-muted">Частота:</span>
                 <select
                   value={rotation.cadence}
                   onChange={(e) => handleUpdateCadence(e.target.value)}
                   disabled={actionLoading === 'rotation'}
                   className="bg-surface-raised text-cream text-sm rounded-md border border-border px-2 py-1 focus:outline-none focus:ring-1 focus:ring-purple"
                 >
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="fortnightly">Fortnightly</option>
-                  <option value="monthly">Monthly</option>
+                  <option value="daily">Ежедневно</option>
+                  <option value="weekly">Еженедельно</option>
+                  <option value="fortnightly">Раз в две недели</option>
+                  <option value="monthly">Ежемесячно</option>
                 </select>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -567,8 +567,8 @@ export default function ChoreDetail() {
                           : 'border-border text-muted'
                       }`}
                     >
-                      {kid?.display_name || `Kid #${kidId}`}
-                      {isCurrent && ' (current)'}
+                      {kid?.display_name || `Ребёнок #${kidId}`}
+                      {isCurrent && ' (текущий)'}
                     </span>
                   );
                 })}
@@ -580,7 +580,7 @@ export default function ChoreDetail() {
                   className="game-btn game-btn-purple flex items-center gap-1.5 !py-1.5 !px-3 !text-[11px]"
                 >
                   <ChevronRight size={14} />
-                  Advance
+                  Сдвинуть
                 </button>
                 <button
                   onClick={handleDeleteRotation}
@@ -588,26 +588,26 @@ export default function ChoreDetail() {
                   className="game-btn game-btn-red flex items-center gap-1.5 !py-1.5 !px-3 !text-[11px]"
                 >
                   <Trash2 size={14} />
-                  Remove Rotation
+                  Удалить ротацию
                 </button>
               </div>
             </div>
           ) : (
             <div className="space-y-3">
               <p className="text-muted text-xs">
-                No rotation set. Create one to automatically rotate this quest between kids.
+                Ротация не настроена. Создайте её, чтобы автоматически чередовать это задание между детьми.
               </p>
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted">Cadence:</span>
+                <span className="text-muted">Частота:</span>
                 <select
                   value={selectedCadence}
                   onChange={(e) => setSelectedCadence(e.target.value)}
                   className="bg-surface-raised text-cream text-sm rounded-md border border-border px-2 py-1 focus:outline-none focus:ring-1 focus:ring-purple"
                 >
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="fortnightly">Fortnightly</option>
-                  <option value="monthly">Monthly</option>
+                  <option value="daily">Ежедневно</option>
+                  <option value="weekly">Еженедельно</option>
+                  <option value="fortnightly">Раз в две недели</option>
+                  <option value="monthly">Ежемесячно</option>
                 </select>
               </div>
               <button
@@ -616,7 +616,7 @@ export default function ChoreDetail() {
                 className="game-btn game-btn-purple flex items-center gap-1.5 !py-1.5 !px-3 !text-[11px]"
               >
                 <RotateCw size={14} />
-                {allKids.length < 2 ? 'Need 2+ kids' : 'Create Rotation'}
+                {allKids.length < 2 ? 'Нужно 2+ детей' : 'Создать ротацию'}
               </button>
             </div>
           )}
@@ -628,7 +628,7 @@ export default function ChoreDetail() {
         <div className="game-panel p-5 space-y-4">
           <div className="flex items-center gap-2">
             <Calendar size={18} className="text-accent" />
-            <h2 className="text-cream text-sm font-semibold">History</h2>
+            <h2 className="text-cream text-sm font-semibold">История</h2>
           </div>
 
           <div className="space-y-2">
@@ -640,7 +640,7 @@ export default function ChoreDetail() {
                 <div className="flex items-center gap-3">
                   <Clock size={14} className="text-cream/30" />
                   <span className="text-muted text-xs">
-                    {assignment.date || assignment.assigned_date || assignment.due_date || 'N/A'}
+                    {assignment.date || assignment.assigned_date || assignment.due_date || '—'}
                   </span>
                   {assignment.assigned_to_name && (
                     <span className="text-muted text-xs">

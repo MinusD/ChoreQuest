@@ -61,7 +61,7 @@ export default function ParentDashboard() {
       );
       setPendingVerifications(needsVerification);
     } catch (err) {
-      setError(err.message || 'Failed to load family data');
+      setError(err.message || 'Не удалось загрузить данные семьи');
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ export default function ParentDashboard() {
       await api(`/api/chores/${choreId}/verify`, { method: 'POST' });
       await fetchData();
     } catch (err) {
-      setError(err.message || 'Failed to verify chore');
+      setError(err.message || 'Не удалось подтвердить квест');
     } finally {
       setActionBusy(key, false);
     }
@@ -101,7 +101,7 @@ export default function ParentDashboard() {
       await api(`/api/chores/${choreId}/uncomplete`, { method: 'POST' });
       await fetchData();
     } catch (err) {
-      setError(err.message || 'Failed to reject chore');
+      setError(err.message || 'Не удалось отклонить квест');
     } finally {
       setActionBusy(key, false);
     }
@@ -110,16 +110,16 @@ export default function ParentDashboard() {
   const handleBonusSubmit = async () => {
     setBonusError('');
     if (!bonusKidId) {
-      setBonusError('Select a kid');
+      setBonusError('Выберите ребёнка');
       return;
     }
     const amt = parseInt(bonusAmount, 10);
     if (!amt || amt <= 0) {
-      setBonusError('Enter a positive XP amount');
+      setBonusError('Введите положительное количество ОП');
       return;
     }
     if (!bonusDescription.trim()) {
-      setBonusError('Enter a description');
+      setBonusError('Введите описание');
       return;
     }
 
@@ -135,7 +135,7 @@ export default function ParentDashboard() {
       setBonusModalOpen(false);
       await fetchData();
     } catch (err) {
-      setBonusError(err.message || 'Failed to award bonus XP');
+      setBonusError(err.message || 'Не удалось наградить бонусными ОП');
     } finally {
       setBonusSubmitting(false);
     }
@@ -183,11 +183,11 @@ export default function ParentDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-cream text-lg font-semibold">
-          Family Overview
+          Обзор семьи
         </h1>
         <div className="flex items-center gap-1.5 text-muted text-sm">
           <Users size={14} />
-          <span>{familyStats.length} members</span>
+          <span>{familyStats.length} участников</span>
         </div>
       </div>
 
@@ -203,7 +203,7 @@ export default function ParentDashboard() {
       {familyStats.length === 0 ? (
         <div className="game-panel p-8 text-center">
           <p className="text-muted text-sm">
-            No kids in your family yet.
+            В вашей семье пока нет детей.
           </p>
         </div>
       ) : (
@@ -242,9 +242,9 @@ export default function ParentDashboard() {
 
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted">Today</span>
+                  <span className="text-muted">Сегодня</span>
                   <span className="text-cream font-medium">
-                    {kid.today_completed}/{kid.today_total} quests
+                    {kid.today_completed}/{kid.today_total} квестов
                   </span>
                 </div>
                 <ProgressBar
@@ -261,7 +261,7 @@ export default function ParentDashboard() {
       {hasPendingItems && (
         <section>
           <h2 className="text-cream text-sm font-semibold mb-2">
-            Pending Verifications
+            Ожидают проверки
           </h2>
 
           <div className="space-y-2">
@@ -283,13 +283,13 @@ export default function ParentDashboard() {
                         className="text-cream text-sm font-medium truncate cursor-pointer hover:text-accent transition-colors"
                         onClick={() => navigate(`/chores/${assignment.chore_id}`)}
                       >
-                        {themedTitle(assignment.chore?.title || 'Chore', colorTheme)}
+                        {themedTitle(assignment.chore?.title || 'Задание', colorTheme)}
                       </p>
                       <p className="text-muted text-xs mt-0.5">
-                        by {assignment.user?.display_name || 'Kid'}
+                        от {assignment.user?.display_name || 'Ребёнок'}
                         {assignment.chore?.requires_photo && (
                           <span className="inline-flex items-center gap-1 ml-2 text-accent">
-                            <Camera size={10} /> Photo
+                            <Camera size={10} /> Фото
                           </span>
                         )}
                         <span className="ml-2 text-gold font-medium">+{assignment.chore?.points} XP</span>
@@ -300,7 +300,7 @@ export default function ParentDashboard() {
                         className="game-btn game-btn-blue !px-2.5 !py-1.5"
                         disabled={isBusy}
                         onClick={() => handleVerifyChore(assignment.chore_id)}
-                        title="Approve"
+                        title="Одобрить"
                       >
                         {isVerifying ? (
                           <Loader2 size={14} className="animate-spin" />
@@ -312,7 +312,7 @@ export default function ParentDashboard() {
                         className="game-btn game-btn-red !px-2.5 !py-1.5"
                         disabled={isBusy}
                         onClick={() => handleRejectChore(assignment.chore_id)}
-                        title="Reject"
+                        title="Отклонить"
                       >
                         {isRejecting ? (
                           <Loader2 size={14} className="animate-spin" />
@@ -326,7 +326,7 @@ export default function ParentDashboard() {
                     <div className="mt-2">
                       <img
                         src={`/api/uploads/${assignment.photo_proof_path}`}
-                        alt="Photo proof"
+                        alt="Фото-подтверждение"
                         className="rounded-md max-h-48 object-cover border border-border"
                       />
                     </div>
@@ -338,7 +338,7 @@ export default function ParentDashboard() {
                       type="text"
                       value={feedbackText[assignment.id] || ''}
                       onChange={e => setFeedbackText(prev => ({ ...prev, [assignment.id]: e.target.value }))}
-                      placeholder="Leave feedback..."
+                      placeholder="Оставить отзыв..."
                       maxLength={500}
                       className="field-input !py-1.5 !text-xs flex-1"
                     />
@@ -346,7 +346,7 @@ export default function ParentDashboard() {
                       onClick={() => handleSendFeedback(assignment.id)}
                       disabled={feedbackSending[assignment.id] || !feedbackText[assignment.id]?.trim()}
                       className="game-btn game-btn-blue !py-1.5 !px-2 flex-shrink-0"
-                      title="Send feedback"
+                      title="Отправить отзыв"
                     >
                       {feedbackSending[assignment.id] ? (
                         <Loader2 size={12} className="animate-spin" />
@@ -357,7 +357,7 @@ export default function ParentDashboard() {
                   </div>
                   {assignment.feedback && (
                     <p className="mt-1.5 ml-5 text-muted text-xs italic">
-                      Feedback: {assignment.feedback}
+                      Отзыв: {assignment.feedback}
                     </p>
                   )}
                 </div>
@@ -374,7 +374,7 @@ export default function ParentDashboard() {
           onClick={() => navigate('/chores')}
         >
           <Plus size={14} />
-          Create Quest
+          Создать квест
         </button>
         <button
           className="game-btn game-btn-purple flex items-center gap-2 justify-center flex-1"
@@ -384,7 +384,7 @@ export default function ParentDashboard() {
           }}
         >
           <Sparkles size={14} />
-          Award Bonus XP
+          Наградить бонусными ОП
         </button>
       </section>
 
@@ -392,15 +392,15 @@ export default function ParentDashboard() {
       <Modal
         isOpen={bonusModalOpen}
         onClose={() => setBonusModalOpen(false)}
-        title="Award Bonus XP"
+        title="Наградить бонусными ОП"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setBonusModalOpen(false),
             className: 'game-btn game-btn-red',
           },
           {
-            label: bonusSubmitting ? 'Awarding...' : 'Award XP',
+            label: bonusSubmitting ? 'Награждение...' : 'Наградить ОП',
             onClick: handleBonusSubmit,
             disabled: bonusSubmitting,
             className: 'game-btn game-btn-gold',
@@ -416,14 +416,14 @@ export default function ParentDashboard() {
 
           <div>
             <label className="block text-cream text-sm font-medium mb-1">
-              Select Kid
+              Выбрать ребёнка
             </label>
             <select
               value={bonusKidId}
               onChange={(e) => setBonusKidId(e.target.value)}
               className="field-input"
             >
-              <option value="">-- Choose --</option>
+              <option value="">-- Выбрать --</option>
               {familyStats.map((kid) => (
                 <option key={kid.id} value={kid.id}>
                   {kid.display_name}
@@ -434,7 +434,7 @@ export default function ParentDashboard() {
 
           <div>
             <label className="block text-cream text-sm font-medium mb-1">
-              XP Amount
+              Количество ОП
             </label>
             <input
               type="number"
@@ -448,13 +448,13 @@ export default function ParentDashboard() {
 
           <div>
             <label className="block text-cream text-sm font-medium mb-1">
-              Reason
+              Причина
             </label>
             <input
               type="text"
               value={bonusDescription}
               onChange={(e) => setBonusDescription(e.target.value)}
-              placeholder="Great job helping out!"
+              placeholder="Отличная помощь!"
               className="field-input"
             />
           </div>

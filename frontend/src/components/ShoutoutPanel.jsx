@@ -4,23 +4,23 @@ import { useAuth } from '../hooks/useAuth';
 import { Megaphone, Send, Loader2 } from 'lucide-react';
 
 const EMOJIS = [
-  { id: 'star', label: 'Star', icon: '\u2B50' },
-  { id: 'fire', label: 'Fire', icon: '\uD83D\uDD25' },
-  { id: 'heart', label: 'Heart', icon: '\u2764\uFE0F' },
-  { id: 'trophy', label: 'Trophy', icon: '\uD83C\uDFC6' },
-  { id: 'clap', label: 'Clap', icon: '\uD83D\uDC4F' },
-  { id: 'muscle', label: 'Strong', icon: '\uD83D\uDCAA' },
+  { id: 'star', label: 'Звезда', icon: '\u2B50' },
+  { id: 'fire', label: 'Огонь', icon: '\uD83D\uDD25' },
+  { id: 'heart', label: 'Сердце', icon: '\u2764\uFE0F' },
+  { id: 'trophy', label: 'Трофей', icon: '\uD83C\uDFC6' },
+  { id: 'clap', label: 'Аплодисменты', icon: '\uD83D\uDC4F' },
+  { id: 'muscle', label: 'Сила', icon: '\uD83D\uDCAA' },
 ];
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return 'только что';
+  if (mins < 60) return `${mins} мин назад`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+  if (hrs < 24) return `${hrs} ч назад`;
+  return `${Math.floor(hrs / 24)} дн назад`;
 }
 
 export default function ShoutoutPanel({ members }) {
@@ -79,13 +79,13 @@ export default function ShoutoutPanel({ members }) {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-cream text-sm font-semibold flex items-center gap-2">
           <Megaphone size={14} className="text-gold" />
-          Shoutouts
+          Похвалы
         </h2>
         <button
           onClick={() => setShowForm((v) => !v)}
           className="text-xs text-accent hover:text-accent-light transition-colors font-medium"
         >
-          {showForm ? 'Cancel' : '+ Give Shoutout'}
+          {showForm ? 'Отмена' : '+ Похвалить'}
         </button>
       </div>
 
@@ -97,7 +97,7 @@ export default function ShoutoutPanel({ members }) {
             onChange={(e) => setToUserId(e.target.value)}
             className="field-input text-sm"
           >
-            <option value="">Who deserves a shoutout?</option>
+            <option value="">Кого похвалить?</option>
             {others.map((m) => (
               <option key={m.id} value={m.id}>{m.display_name}</option>
             ))}
@@ -106,7 +106,7 @@ export default function ShoutoutPanel({ members }) {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value.slice(0, 200))}
-            placeholder="Great job on your quests!"
+            placeholder="Отличная работа с заданиями!"
             className="field-input text-sm"
             maxLength={200}
           />
@@ -131,7 +131,7 @@ export default function ShoutoutPanel({ members }) {
               className="game-btn game-btn-blue flex items-center gap-1.5 !py-2 !px-3"
             >
               {sending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
-              Send
+              Отправить
             </button>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function ShoutoutPanel({ members }) {
       {/* Shoutout feed */}
       {shoutouts.length === 0 ? (
         <p className="text-muted text-sm text-center py-4">
-          No shoutouts yet. Be the first!
+          Похвал пока нет. Будьте первым!
         </p>
       ) : (
         <div className="space-y-2">

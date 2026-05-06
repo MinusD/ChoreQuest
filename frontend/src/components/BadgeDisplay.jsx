@@ -41,7 +41,7 @@ export default function BadgeDisplay({ achievement }) {
           {unlocked ? title : '???'}
         </p>
         <p className="text-muted text-xs truncate">
-          {unlocked ? description : 'Locked achievement'}
+          {unlocked ? description : 'Заблокированное достижение'}
         </p>
       </div>
 

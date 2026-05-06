@@ -57,9 +57,9 @@ export default function Settings() {
       setSettings(parseSettings(data));
     } catch (err) {
       if (err.message?.includes('403') || err.message?.includes('Forbidden') || err.message?.includes('permission')) {
-        setError('Access denied. Only parents and admins can access settings.');
+        setError('Доступ запрещён. Только родители и администраторы могут открывать настройки.');
       } else {
-        setError(err.message || 'Failed to load settings');
+        setError(err.message || 'Не удалось загрузить настройки');
       }
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ export default function Settings() {
       fetchAchievements();
     } else {
       setLoading(false);
-      setError('Access denied. Only parents and admins can access settings.');
+      setError('Доступ запрещён. Только родители и администраторы могут открывать настройки.');
     }
   }, [isParentOrAdmin, fetchSettings, fetchAchievements]);
 
@@ -98,10 +98,10 @@ export default function Settings() {
     setSaveMsg('');
     try {
       await api('/api/admin/settings', { method: 'PUT', body: { settings: stringifySettings(settings) } });
-      setSaveMsg('Settings saved!');
+      setSaveMsg('Настройки сохранены!');
       window.dispatchEvent(new CustomEvent('settings:updated'));
     } catch (err) {
-      setSaveMsg(err.message || 'Failed to save settings');
+      setSaveMsg(err.message || 'Не удалось сохранить настройки');
     } finally {
       setSaving(false);
       setTimeout(() => setSaveMsg(''), 3000);
@@ -132,7 +132,7 @@ export default function Settings() {
             ? 'bg-accent/30 border-accent/40'
             : 'bg-navy border-border'
         }`}
-        aria-label={`Toggle ${label}`}
+        aria-label={`Переключить: ${label}`}
       >
         <span
           className={`inline-block h-4 w-4 rounded-full transition-transform ${
@@ -153,12 +153,12 @@ export default function Settings() {
         className="flex items-center gap-1.5 text-muted hover:text-cream transition-colors mb-4 text-sm"
       >
         <ArrowLeft size={16} />
-        Profile
+        Профиль
       </button>
       <div className="flex items-center gap-3 mb-6">
         <CogIcon size={24} className="text-cream" />
         <h1 className="text-cream text-lg font-semibold">
-          Family Settings
+          Семейные настройки
         </h1>
       </div>
 
@@ -168,7 +168,7 @@ export default function Settings() {
           <Shield size={48} className="text-crimson/30 mx-auto mb-4" />
           <p className="text-crimson text-sm">{error}</p>
           <p className="text-muted text-xs mt-2">
-            Only parents and admins can change settings.
+            Только родители и администраторы могут изменять настройки.
           </p>
         </div>
       )}
@@ -186,24 +186,24 @@ export default function Settings() {
           {/* Toggle settings */}
           <div className="game-panel p-4">
             <h2 className="text-cream text-sm font-semibold mb-3">
-              Feature Toggles
+              Переключатели функций
             </h2>
 
             <div className="divide-y divide-border">
               <ToggleSwitch
                 enabled={settings.leaderboard_enabled ?? true}
                 onChange={(v) => updateSetting('leaderboard_enabled', v)}
-                label="Leaderboard"
+                label="Таблица лидеров"
               />
               <ToggleSwitch
                 enabled={settings.spin_wheel_enabled ?? true}
                 onChange={(v) => updateSetting('spin_wheel_enabled', v)}
-                label="Spin Wheel"
+                label="Колесо удачи"
               />
               <ToggleSwitch
                 enabled={settings.chore_trading_enabled ?? true}
                 onChange={(v) => updateSetting('chore_trading_enabled', v)}
-                label="Chore Trading"
+                label="Обмен делами"
               />
             </div>
           </div>
@@ -211,10 +211,10 @@ export default function Settings() {
           {/* Daily reset hour */}
           <div className="game-panel p-4">
             <h2 className="text-cream text-sm font-semibold mb-3">
-              Daily Reset Hour
+              Час ежедневного сброса
             </h2>
             <p className="text-muted text-xs mb-3">
-              Hour of day (0-23) when daily quests reset.
+              Час суток (0-23), когда сбрасываются ежедневные задания.
             </p>
             <input
               type="number"
@@ -240,7 +240,7 @@ export default function Settings() {
             ) : (
               <Save size={14} />
             )}
-            {saving ? 'Saving...' : 'Save Settings'}
+            {saving ? 'Сохранение...' : 'Сохранить настройки'}
           </button>
           {saveMsg && (
             <p className={`text-sm ${saveMsg.includes('!') ? 'text-emerald' : 'text-crimson'}`}>
@@ -252,7 +252,7 @@ export default function Settings() {
           <div className="game-panel p-4">
             <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
               <Award size={16} className="text-muted" />
-              Achievement Point Values
+              Очки достижений
             </h2>
 
             {achievementsLoading ? (
@@ -261,7 +261,7 @@ export default function Settings() {
               </div>
             ) : achievements.length === 0 ? (
               <p className="text-muted text-xs">
-                No achievements configured yet.
+                Достижения пока не настроены.
               </p>
             ) : (
               <div className="space-y-3">
@@ -307,12 +307,12 @@ export default function Settings() {
                         }}
                         className="field-input !w-20 !p-2 text-center"
                       />
-                      <span className="text-muted text-xs">pts</span>
+                      <span className="text-muted text-xs">очк.</span>
                       <button
                         onClick={() => updateAchievementPoints(ach)}
                         disabled={achievementsSaving[ach.id]}
                         className="game-btn game-btn-blue !py-2 !px-3 ml-auto"
-                        title="Save"
+                        title="Сохранить"
                       >
                         {achievementsSaving[ach.id] ? (
                           <Loader2 size={12} className="animate-spin" />
@@ -335,14 +335,14 @@ export default function Settings() {
           {user?.role === 'admin' && (
             <div className="game-panel p-4 text-center">
               <p className="text-muted text-xs mb-3">
-                Need advanced controls?
+                Нужны расширенные настройки?
               </p>
               <button
                 onClick={() => navigate('/admin')}
                 className="game-btn game-btn-purple"
               >
                 <Shield size={14} className="inline mr-2" />
-                Admin Dashboard
+                Панель администратора
               </button>
             </div>
           )}

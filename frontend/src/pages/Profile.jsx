@@ -53,7 +53,7 @@ function PushNotificationToggle() {
       const data = await api('/api/push/test', { method: 'POST' });
       setTestResult(data.detail);
     } catch (err) {
-      setTestResult(err.message || 'Test failed');
+      setTestResult(err.message || 'Проверка не удалась');
     } finally {
       setTesting(false);
     }
@@ -68,35 +68,35 @@ function PushNotificationToggle() {
     <div className="game-panel p-4">
       <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
         {subscribed ? <Bell size={14} className="text-accent" /> : <BellOff size={14} className="text-muted" />}
-        Push Notifications
+        Push-уведомления
       </h2>
       {needsHttps ? (
         <div>
-          <p className="text-cream/80 text-sm">Get notified about quests, rewards & achievements</p>
-          <p className="text-amber/80 text-xs mt-2">Push notifications require HTTPS.</p>
+          <p className="text-cream/80 text-sm">Получайте уведомления о заданиях, наградах и достижениях</p>
+          <p className="text-amber/80 text-xs mt-2">Для push-уведомлений нужен HTTPS.</p>
         </div>
       ) : needsInstall ? (
         <div>
-          <p className="text-cream/80 text-sm">Get notified about quests, rewards & achievements</p>
-          <p className="text-amber/80 text-xs mt-2">Add ChoreQuest to your Home Screen to enable notifications.</p>
+          <p className="text-cream/80 text-sm">Получайте уведомления о заданиях, наградах и достижениях</p>
+          <p className="text-amber/80 text-xs mt-2">Добавьте ChoreQuest на главный экран, чтобы включить уведомления.</p>
         </div>
       ) : unsupported ? (
         <div>
-          <p className="text-cream/80 text-sm">Get notified about quests, rewards & achievements</p>
-          <p className="text-muted text-xs mt-2">Your browser does not support push notifications.</p>
+          <p className="text-cream/80 text-sm">Получайте уведомления о заданиях, наградах и достижениях</p>
+          <p className="text-muted text-xs mt-2">Ваш браузер не поддерживает push-уведомления.</p>
         </div>
       ) : (
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1 mr-3">
             <p className="text-cream/80 text-sm">
               {denied
-                ? 'Notifications blocked by browser'
+                ? 'Уведомления заблокированы браузером'
                 : subscribed
-                  ? 'Alerts enabled'
-                  : 'Get notified about quests & rewards'}
+                  ? 'Уведомления включены'
+                  : 'Получайте уведомления о заданиях и наградах'}
             </p>
             {denied && (
-              <p className="text-muted text-xs mt-1">Check browser settings to allow notifications.</p>
+              <p className="text-muted text-xs mt-1">Проверьте настройки браузера и разрешите уведомления.</p>
             )}
           </div>
           <button
@@ -125,7 +125,7 @@ function PushNotificationToggle() {
             disabled={testing}
             className="text-xs text-accent/70 hover:text-accent underline"
           >
-            {testing ? 'Sending...' : 'Send test notification'}
+            {testing ? 'Отправка...' : 'Отправить тестовое уведомление'}
           </button>
           {testResult && (
             <span className="text-xs text-muted">{testResult}</span>
@@ -208,9 +208,9 @@ export default function Profile() {
         body: { display_name: displayName.trim() },
       });
       updateUser({ display_name: data.display_name || displayName.trim() });
-      setNameMsg('Name updated!');
+      setNameMsg('Имя обновлено!');
     } catch (err) {
-      setNameMsg(err.message || 'Failed to update name');
+      setNameMsg(err.message || 'Не удалось обновить имя');
     } finally {
       setNameSaving(false);
       setTimeout(() => setNameMsg(''), 3000);
@@ -219,17 +219,17 @@ export default function Profile() {
 
   const savePin = async () => {
     if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
-      setPinMsg('PIN must be exactly 6 digits');
+      setPinMsg('PIN должен состоять ровно из 6 цифр');
       return;
     }
     setPinSaving(true);
     setPinMsg('');
     try {
       await api('/api/auth/set-pin', { method: 'POST', body: { pin } });
-      setPinMsg('PIN set successfully!');
+      setPinMsg('PIN успешно установлен!');
       setPin('');
     } catch (err) {
-      setPinMsg(err.message || 'Failed to set PIN');
+      setPinMsg(err.message || 'Не удалось установить PIN');
     } finally {
       setPinSaving(false);
       setTimeout(() => setPinMsg(''), 3000);
@@ -238,15 +238,15 @@ export default function Profile() {
 
   const changePassword = async () => {
     if (!currentPassword || !newPassword) {
-      setPwMsg('Fill in all password fields');
+      setPwMsg('Заполните все поля пароля');
       return;
     }
     if (newPassword !== confirmPassword) {
-      setPwMsg('New passwords do not match');
+      setPwMsg('Новые пароли не совпадают');
       return;
     }
     if (newPassword.length < 6) {
-      setPwMsg('New password must be at least 6 characters');
+      setPwMsg('Новый пароль должен быть не короче 6 символов');
       return;
     }
     setPwSaving(true);
@@ -259,12 +259,12 @@ export default function Profile() {
           new_password: newPassword,
         },
       });
-      setPwMsg('Password changed!');
+      setPwMsg('Пароль изменён!');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err) {
-      setPwMsg(err.message || 'Failed to change password');
+      setPwMsg(err.message || 'Не удалось изменить пароль');
     } finally {
       setPwSaving(false);
       setTimeout(() => setPwMsg(''), 3000);
@@ -274,7 +274,7 @@ export default function Profile() {
   return (
     <div className="max-w-xl mx-auto space-y-4">
       <h1 className="text-cream text-lg font-semibold mb-1">
-        Profile
+        Профиль
       </h1>
 
       {/* Avatar + Name */}
@@ -282,7 +282,7 @@ export default function Profile() {
         <button
           onClick={() => navigate('/avatar')}
           className="relative"
-          aria-label="Customise avatar"
+          aria-label="Настроить аватар"
         >
           <AvatarDisplay
             config={user?.avatar_config}
@@ -311,7 +311,7 @@ export default function Profile() {
         {/* Editable display name */}
         <div className="w-full max-w-xs">
           <label className="block text-cream text-sm font-medium mb-1 text-center">
-            Display Name
+            Отображаемое имя
           </label>
           <div className="flex gap-2">
             <input
@@ -319,7 +319,7 @@ export default function Profile() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               maxLength={10}
-              placeholder="Your display name"
+              placeholder="Ваше отображаемое имя"
               className="field-input"
             />
             <button
@@ -341,7 +341,7 @@ export default function Profile() {
       {/* Stats (kids only) */}
       {isKid && (
         <div className="game-panel p-4">
-          <h2 className="text-cream text-sm font-semibold mb-3">Stats</h2>
+          <h2 className="text-cream text-sm font-semibold mb-3">Статистика</h2>
           {statsLoading ? (
             <div className="flex justify-center py-4">
               <Loader2 size={18} className="text-accent animate-spin" />
@@ -354,21 +354,21 @@ export default function Profile() {
                   <p className="text-gold text-sm font-medium">
                     {stats.points_balance ?? stats.xp_balance ?? 0}
                   </p>
-                  <p className="text-muted text-xs">XP Balance</p>
+                  <p className="text-muted text-xs">Баланс XP</p>
                 </div>
                 <div className="text-center">
                   <Award size={16} className="text-emerald mx-auto mb-1" />
                   <p className="text-emerald text-sm font-medium">
                     {stats.total_points_earned ?? stats.total_xp_earned ?? 0}
                   </p>
-                  <p className="text-muted text-xs">Total Earned</p>
+                  <p className="text-muted text-xs">Всего заработано</p>
                 </div>
                 <div className="text-center">
                   <Flame size={16} className="text-orange-400 mx-auto mb-1" />
                   <p className="text-orange-400 text-sm font-medium">
                     {stats.current_streak ?? stats.streak ?? 0}
                   </p>
-                  <p className="text-muted text-xs">Streak</p>
+                  <p className="text-muted text-xs">Серия</p>
                 </div>
                 <button
                   className="text-center hover:bg-surface-raised/50 rounded-md py-1 transition-colors"
@@ -379,7 +379,7 @@ export default function Profile() {
                     {stats.achievements_count ?? 0}
                   </p>
                   <p className="text-muted text-xs flex items-center justify-center gap-0.5">
-                    Achievements <ChevronRight size={10} />
+                    Достижения <ChevronRight size={10} />
                   </p>
                 </button>
               </div>
@@ -387,7 +387,7 @@ export default function Profile() {
               {stats.rank && stats.rank.next_threshold && (
                 <div className="mt-3 pt-3 border-t border-border/50">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-muted text-xs">Next rank: {stats.rank.next_title}</span>
+                    <span className="text-muted text-xs">Следующий ранг: {stats.rank.next_title}</span>
                     <span className="text-cream text-xs font-medium">
                       {stats.total_points_earned}/{stats.rank.next_threshold} XP
                     </span>
@@ -406,12 +406,12 @@ export default function Profile() {
                 className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-md bg-surface-raised/30 hover:bg-surface-raised/60 border border-border/50 text-muted hover:text-cream transition-colors text-xs font-medium"
               >
                 <BarChart3 size={13} />
-                {showProgress ? 'Hide Charts' : 'View Progress Charts'}
+                {showProgress ? 'Скрыть графики' : 'Показать графики прогресса'}
               </button>
             </>
           ) : (
             <p className="text-muted text-center text-sm">
-              Stats not available yet.
+              Статистика пока недоступна.
             </p>
           )}
         </div>
@@ -423,13 +423,13 @@ export default function Profile() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-cream text-sm font-semibold flex items-center gap-2">
               <Trophy size={14} className="text-purple" />
-              Achievements
+              Достижения
             </h2>
             <button
               onClick={() => setShowAchievements(false)}
               className="text-muted text-xs hover:text-cream transition-colors"
             >
-              Hide
+              Скрыть
             </button>
           </div>
           {achievementsLoading ? (
@@ -437,14 +437,14 @@ export default function Profile() {
               <Loader2 size={18} className="text-accent animate-spin" />
             </div>
           ) : achievements.length === 0 ? (
-            <p className="text-muted text-center text-sm">No achievements available yet.</p>
+            <p className="text-muted text-center text-sm">Достижений пока нет.</p>
           ) : (
             <div className="space-y-1.5">
               {(() => {
                 const tierColors = {
-                  bronze: { border: 'border-amber-600/40', bg: 'bg-amber-600/10', text: 'text-amber-500', icon: 'text-amber-500', label: 'Bronze' },
-                  silver: { border: 'border-slate-300/40', bg: 'bg-slate-300/10', text: 'text-slate-300', icon: 'text-slate-300', label: 'Silver' },
-                  gold: { border: 'border-yellow-400/40', bg: 'bg-yellow-400/10', text: 'text-yellow-400', icon: 'text-yellow-400', label: 'Gold' },
+                  bronze: { border: 'border-amber-600/40', bg: 'bg-amber-600/10', text: 'text-amber-500', icon: 'text-amber-500', label: 'Бронза' },
+                  silver: { border: 'border-slate-300/40', bg: 'bg-slate-300/10', text: 'text-slate-300', icon: 'text-slate-300', label: 'Серебро' },
+                  gold: { border: 'border-yellow-400/40', bg: 'bg-yellow-400/10', text: 'text-yellow-400', icon: 'text-yellow-400', label: 'Золото' },
                 };
                 const grouped = [];
                 const seen = new Set();
@@ -527,7 +527,7 @@ export default function Profile() {
                                   } catch { /* ignore */ }
                                 }}
                                 className="p-1 rounded-md hover:bg-surface-raised/60 transition-colors"
-                                title="Download badge"
+                                title="Скачать значок"
                               >
                                 <Download size={11} className="text-muted hover:text-cream" />
                               </button>
@@ -550,13 +550,13 @@ export default function Profile() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-cream text-sm font-semibold flex items-center gap-2">
               <BarChart3 size={14} className="text-accent" />
-              Progress Charts
+              Графики прогресса
             </h2>
             <button
               onClick={() => setShowProgress(false)}
               className="text-muted text-xs hover:text-cream transition-colors"
             >
-              Hide
+              Скрыть
             </button>
           </div>
           <ProgressCharts />
@@ -571,7 +571,7 @@ export default function Profile() {
             className="w-full flex items-center justify-center gap-2 py-2 text-muted hover:text-cream transition-colors text-xs font-medium"
           >
             <BarChart3 size={13} />
-            {showProgress ? 'Hide Family Progress Charts' : 'View Family Progress Charts'}
+            {showProgress ? 'Скрыть семейные графики прогресса' : 'Показать семейные графики прогресса'}
           </button>
           {showProgress && (
             <div className="mt-3">
@@ -585,7 +585,7 @@ export default function Profile() {
       <div className="game-panel p-4">
         <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
           <KeyRound size={14} className="text-muted" />
-          Quick PIN Login
+          Быстрый вход по PIN
         </h2>
         <div className="flex gap-2">
           <input
@@ -594,7 +594,7 @@ export default function Profile() {
             maxLength={6}
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="6-digit PIN"
+            placeholder="6-значный PIN"
             className="field-input"
           />
           <button
@@ -602,7 +602,7 @@ export default function Profile() {
             disabled={pinSaving}
             className="game-btn game-btn-blue flex-shrink-0"
           >
-            {pinSaving ? 'Setting...' : 'Set PIN'}
+            {pinSaving ? 'Установка...' : 'Установить PIN'}
           </button>
         </div>
         {pinMsg && (
@@ -616,14 +616,14 @@ export default function Profile() {
       <div className="game-panel p-4">
         <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
           <Lock size={14} className="text-muted" />
-          Change Password
+          Изменить пароль
         </h2>
         <div className="space-y-2">
-          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" autoComplete="current-password" className="field-input" />
-          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" autoComplete="new-password" className="field-input" />
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm new password" autoComplete="new-password" className="field-input" />
+          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Текущий пароль" autoComplete="current-password" className="field-input" />
+          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Новый пароль" autoComplete="new-password" className="field-input" />
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Подтвердите новый пароль" autoComplete="new-password" className="field-input" />
           <button onClick={changePassword} disabled={pwSaving} className="game-btn game-btn-blue">
-            {pwSaving ? 'Changing...' : 'Change Password'}
+            {pwSaving ? 'Изменение...' : 'Изменить пароль'}
           </button>
         </div>
         {pwMsg && (
@@ -638,12 +638,12 @@ export default function Profile() {
 
       {/* Theme Toggle */}
       <div className="game-panel p-4">
-        <h2 className="text-cream text-sm font-semibold mb-3">Appearance</h2>
+        <h2 className="text-cream text-sm font-semibold mb-3">Внешний вид</h2>
         <div className="flex items-center gap-0.5 mb-4 bg-navy/60 rounded-md p-0.5">
           {[
-            { id: 'light', icon: Sun, label: 'Light' },
-            { id: 'dark', icon: Moon, label: 'Dark' },
-            { id: 'system', icon: Monitor, label: 'Auto' },
+            { id: 'light', icon: Sun, label: 'Светлая' },
+            { id: 'dark', icon: Moon, label: 'Тёмная' },
+            { id: 'system', icon: Monitor, label: 'Авто' },
           ].map(({ id, icon: Icon, label }) => (
             <button
               key={id}
@@ -661,11 +661,11 @@ export default function Profile() {
         </div>
 
         {/* Color Theme */}
-        <p className="text-muted text-xs font-medium mb-2">Color Theme</p>
+        <p className="text-muted text-xs font-medium mb-2">Цветовая тема</p>
         {['boy', 'girl'].map((group) => (
           <div key={group} className="mb-3">
             <p className="text-muted text-[11px] font-medium mb-1.5">
-              {group === 'boy' ? 'Knight Themes' : 'Princess Themes'}
+              {group === 'boy' ? 'Темы рыцарей' : 'Темы принцесс'}
             </p>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
               {COLOR_THEMES.filter((t) => t.group === group).map((t) => {
@@ -716,7 +716,7 @@ export default function Profile() {
         <div className="game-panel p-4 space-y-1.5">
           <h2 className="text-cream text-sm font-semibold mb-2 flex items-center gap-2">
             <Settings size={14} className="text-muted" />
-            Management
+            Управление
           </h2>
           <button
             onClick={() => navigate('/settings')}
@@ -724,8 +724,8 @@ export default function Profile() {
           >
             <Settings size={16} className="text-accent flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-cream text-sm font-medium">Family Settings</p>
-              <p className="text-muted text-xs">Features, resets & rewards</p>
+              <p className="text-cream text-sm font-medium">Семейные настройки</p>
+              <p className="text-muted text-xs">Функции, сбросы и награды</p>
             </div>
             <ChevronRight size={14} className="text-muted flex-shrink-0" />
           </button>
@@ -736,8 +736,8 @@ export default function Profile() {
             >
               <ShieldCheck size={16} className="text-crimson flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-cream text-sm font-medium">Admin Dashboard</p>
-                <p className="text-muted text-xs">Users, keys & audit log</p>
+                <p className="text-cream text-sm font-medium">Панель администратора</p>
+                <p className="text-muted text-xs">Пользователи, ключи и аудит</p>
               </div>
               <ChevronRight size={14} className="text-muted flex-shrink-0" />
             </button>
@@ -752,7 +752,7 @@ export default function Profile() {
           className="game-btn game-btn-red w-full flex items-center justify-center gap-2"
         >
           <LogOut size={14} />
-          Sign Out
+          Выйти
         </button>
       </div>
     </div>

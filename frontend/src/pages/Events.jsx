@@ -49,7 +49,7 @@ export default function Events() {
       const data = await api('/api/events');
       setEvents(data || []);
     } catch (err) {
-      setError(err.message || 'Failed to load events');
+      setError(err.message || 'Не удалось загрузить события');
     } finally {
       setLoading(false);
     }
@@ -88,11 +88,11 @@ export default function Events() {
   };
 
   const submitForm = async () => {
-    if (!title.trim()) { setFormError('Title is required'); return; }
-    if (!startDate || !endDate) { setFormError('Start and end dates are required'); return; }
+    if (!title.trim()) { setFormError('Введите название'); return; }
+    if (!startDate || !endDate) { setFormError('Укажите дату начала и окончания'); return; }
     const mult = parseFloat(multiplier);
-    if (!mult || mult <= 1) { setFormError('Multiplier must be greater than 1'); return; }
-    if (new Date(endDate) <= new Date(startDate)) { setFormError('End date must be after start date'); return; }
+    if (!mult || mult <= 1) { setFormError('Множитель должен быть больше 1'); return; }
+    if (new Date(endDate) <= new Date(startDate)) { setFormError('Дата окончания должна быть позже даты начала'); return; }
 
     setSubmitting(true);
     setFormError('');
@@ -113,7 +113,7 @@ export default function Events() {
       setFormModal(false);
       fetchEvents();
     } catch (err) {
-      setFormError(err.message || 'Failed to save event');
+      setFormError(err.message || 'Не удалось сохранить событие');
     } finally {
       setSubmitting(false);
     }
@@ -124,7 +124,7 @@ export default function Events() {
       await api(`/api/events/${id}/end`, { method: 'POST' });
       fetchEvents();
     } catch (err) {
-      setError(err.message || 'Failed to end event');
+      setError(err.message || 'Не удалось завершить событие');
     }
   };
 
@@ -133,7 +133,7 @@ export default function Events() {
       await api(`/api/events/${id}`, { method: 'DELETE' });
       fetchEvents();
     } catch (err) {
-      setError(err.message || 'Failed to delete event');
+      setError(err.message || 'Не удалось удалить событие');
     }
   };
 
@@ -143,14 +143,14 @@ export default function Events() {
       <div className="flex items-center justify-between gap-3 mb-6">
         <div className="flex items-center gap-3">
           <h1 className="text-cream text-lg font-semibold">
-            Seasonal Events
+            Сезонные события
           </h1>
         </div>
 
         {isParent && (
           <button onClick={openCreate} className="game-btn game-btn-gold flex items-center gap-2">
             <Plus size={14} />
-            New Event
+            Новое событие
           </button>
         )}
       </div>
@@ -170,7 +170,7 @@ export default function Events() {
       {!loading && events.length === 0 && (
         <div className="text-center py-16">
           <Sparkles size={48} className="text-muted mx-auto mb-4" />
-          <p className="text-cream text-sm font-medium">No events yet</p>
+          <p className="text-cream text-sm font-medium">Событий пока нет</p>
         </div>
       )}
 
@@ -190,7 +190,7 @@ export default function Events() {
                     <p className="text-cream text-sm font-medium truncate">{event.title}</p>
                     {event.is_active && (
                       <span className="text-[10px] font-medium bg-gold/20 text-gold px-2 py-0.5 rounded">
-                        Active
+                        Активно
                       </span>
                     )}
                   </div>
@@ -209,7 +209,7 @@ export default function Events() {
                       <button
                         onClick={() => endEvent(event.id)}
                         className="p-2 rounded hover:bg-gold/10 text-gold/60 hover:text-gold transition-colors"
-                        title="End event early"
+                        title="Завершить событие досрочно"
                       >
                         <Square size={14} />
                       </button>
@@ -217,14 +217,14 @@ export default function Events() {
                     <button
                       onClick={() => openEdit(event)}
                       className="p-2 rounded hover:bg-surface-raised text-muted hover:text-cream transition-colors"
-                      title="Edit"
+                      title="Редактировать"
                     >
                       <Pencil size={14} />
                     </button>
                     <button
                       onClick={() => deleteEvent(event.id)}
                       className="p-2 rounded hover:bg-crimson/10 text-crimson/60 hover:text-crimson transition-colors"
-                      title="Delete"
+                      title="Удалить"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -240,10 +240,10 @@ export default function Events() {
       <Modal
         isOpen={formModal}
         onClose={() => setFormModal(false)}
-        title={editing ? 'Edit Event' : 'New Seasonal Event'}
+        title={editing ? 'Редактировать событие' : 'Новое сезонное событие'}
         actions={[
-          { label: 'Cancel', onClick: () => setFormModal(false), className: 'game-btn game-btn-red' },
-          { label: submitting ? 'Saving...' : 'Save', onClick: submitForm, className: 'game-btn game-btn-gold', disabled: submitting },
+          { label: 'Отмена', onClick: () => setFormModal(false), className: 'game-btn game-btn-red' },
+          { label: submitting ? 'Сохранение...' : 'Сохранить', onClick: submitForm, className: 'game-btn game-btn-gold', disabled: submitting },
         ]}
       >
         <div className="space-y-4">
@@ -254,44 +254,44 @@ export default function Events() {
           )}
 
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Title</label>
+            <label className="block text-cream text-sm font-medium mb-1">Название</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Summer Challenge"
+              placeholder="например, Летний вызов"
               className="field-input"
             />
           </div>
 
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Description (optional)</label>
+            <label className="block text-cream text-sm font-medium mb-1">Описание (необязательно)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="What's the event about?"
+              placeholder="О чём это событие?"
               rows={2}
               className="field-input resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">XP Multiplier</label>
+            <label className="block text-cream text-sm font-medium mb-1">Множитель XP</label>
             <input
               type="number"
               min="1.1"
               step="0.1"
               value={multiplier}
               onChange={(e) => setMultiplier(e.target.value)}
-              placeholder="e.g. 2.0"
+              placeholder="например, 2.0"
               className="field-input"
             />
-            <p className="text-muted text-xs mt-1">All XP earned during this event is multiplied by this amount.</p>
+            <p className="text-muted text-xs mt-1">Весь XP за время события умножается на это значение.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-cream text-sm font-medium mb-1">Start Date</label>
+              <label className="block text-cream text-sm font-medium mb-1">Дата начала</label>
               <input
                 type="date"
                 value={startDate}
@@ -300,7 +300,7 @@ export default function Events() {
               />
             </div>
             <div>
-              <label className="block text-cream text-sm font-medium mb-1">End Date</label>
+              <label className="block text-cream text-sm font-medium mb-1">Дата окончания</label>
               <input
                 type="date"
                 value={endDate}

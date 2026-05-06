@@ -23,10 +23,10 @@ import {
 } from 'lucide-react';
 
 const TABS = [
-  { key: 'users', label: 'Users', icon: Users },
-  { key: 'api-keys', label: 'API Keys', icon: Key },
-  { key: 'invite-codes', label: 'Invite Codes', icon: Ticket },
-  { key: 'audit-log', label: 'Audit Log', icon: ScrollText },
+  { key: 'users', label: 'Пользователи', icon: Users },
+  { key: 'api-keys', label: 'API-ключи', icon: Key },
+  { key: 'invite-codes', label: 'Коды приглашений', icon: Ticket },
+  { key: 'audit-log', label: 'Журнал аудита', icon: ScrollText },
 ];
 
 // ─── Users Tab ───────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ function UsersTab() {
       const data = await api('/api/admin/users');
       setUsers(Array.isArray(data) ? data : (data.users || []));
     } catch (err) {
-      setError(err.message || 'Failed to load users');
+      setError(err.message || 'Не удалось загрузить пользователей');
     } finally {
       setLoading(false);
     }
@@ -62,15 +62,15 @@ function UsersTab() {
         prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u))
       );
     } catch (err) {
-      setError(err.message || 'Failed to update role');
+      setError(err.message || 'Не удалось обновить роль');
     }
   };
 
   const resetPassword = async (usr) => {
-    const newPassword = window.prompt(`New password for ${usr.display_name || usr.username} (min 6 chars):`);
+    const newPassword = window.prompt(`Новый пароль для ${usr.display_name || usr.username} (минимум 6 символов):`);
     if (!newPassword) return;
     if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Пароль должен быть не короче 6 символов');
       return;
     }
     try {
@@ -79,9 +79,9 @@ function UsersTab() {
         body: { new_password: newPassword },
       });
       setError('');
-      alert(`Password reset for ${usr.display_name || usr.username}`);
+      alert(`Пароль сброшен для ${usr.display_name || usr.username}`);
     } catch (err) {
-      setError(err.message || 'Failed to reset password');
+      setError(err.message || 'Не удалось сбросить пароль');
     }
   };
 
@@ -97,7 +97,7 @@ function UsersTab() {
         )
       );
     } catch (err) {
-      setError(err.message || 'Failed to toggle user status');
+      setError(err.message || 'Не удалось изменить статус пользователя');
     }
   };
 
@@ -119,7 +119,7 @@ function UsersTab() {
 
       {users.length === 0 ? (
         <p className="text-muted text-center py-8 text-sm">
-          No users yet.
+          Пользователей пока нет.
         </p>
       ) : (
         <div className="space-y-3">
@@ -139,7 +139,7 @@ function UsersTab() {
                       : 'bg-crimson/10 text-crimson border border-crimson/30'
                   }`}
                 >
-                  {usr.is_active !== false ? 'Active' : 'Inactive'}
+                  {usr.is_active !== false ? 'Активен' : 'Неактивен'}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ function UsersTab() {
                   onClick={() => resetPassword(usr)}
                   className="game-btn game-btn-blue !py-1.5 !px-3 !text-[10px] flex-shrink-0"
                 >
-                  <RotateCcw size={12} className="inline mr-1" />Password
+                  <RotateCcw size={12} className="inline mr-1" />Пароль
                 </button>
                 <button
                   onClick={() => toggleActive(usr)}
@@ -165,9 +165,9 @@ function UsersTab() {
                   }`}
                 >
                   {usr.is_active !== false ? (
-                    <><EyeOff size={12} className="inline mr-1" />Deactivate</>
+                    <><EyeOff size={12} className="inline mr-1" />Деактивировать</>
                   ) : (
-                    <><Eye size={12} className="inline mr-1" />Activate</>
+                    <><Eye size={12} className="inline mr-1" />Активировать</>
                   )}
                 </button>
               </div>
@@ -199,7 +199,7 @@ function ApiKeysTab() {
       const data = await api('/api/admin/api-keys');
       setKeys(Array.isArray(data) ? data : (data.keys || []));
     } catch (err) {
-      setError(err.message || 'Failed to load API keys');
+      setError(err.message || 'Не удалось загрузить API-ключи');
     } finally {
       setLoading(false);
     }
@@ -220,7 +220,7 @@ function ApiKeysTab() {
       setNewKeyValue(data.key || data.api_key || data.token || '');
       fetchKeys();
     } catch (err) {
-      setError(err.message || 'Failed to create key');
+      setError(err.message || 'Не удалось создать ключ');
       setCreateModal(false);
     } finally {
       setCreateSubmitting(false);
@@ -232,7 +232,7 @@ function ApiKeysTab() {
       await api(`/api/admin/api-keys/${id}`, { method: 'DELETE' });
       setKeys((prev) => prev.filter((k) => k.id !== id));
     } catch (err) {
-      setError(err.message || 'Failed to delete key');
+      setError(err.message || 'Не удалось удалить ключ');
     }
   };
 
@@ -275,13 +275,13 @@ function ApiKeysTab() {
           className="game-btn game-btn-blue flex items-center gap-2"
         >
           <Plus size={14} />
-          Create Key
+          Создать ключ
         </button>
       </div>
 
       {keys.length === 0 ? (
         <p className="text-muted text-center py-8 text-sm">
-          No API keys yet.
+          API-ключей пока нет.
         </p>
       ) : (
         <div className="space-y-3">
@@ -294,18 +294,18 @@ function ApiKeysTab() {
                 <button
                   onClick={() => deleteKey(k.id)}
                   className="p-1.5 rounded hover:bg-crimson/10 text-crimson/60 hover:text-crimson transition-colors flex-shrink-0"
-                  title="Delete key"
+                  title="Удалить ключ"
                 >
                   <Trash2 size={14} />
                 </button>
               </div>
               <div className="flex flex-wrap gap-x-3 gap-y-1">
                 <span className="text-muted text-xs">
-                  Prefix: <span className="text-accent">{k.prefix || k.key_prefix || '***'}</span>
+                  Префикс: <span className="text-accent">{k.prefix || k.key_prefix || '***'}</span>
                 </span>
                 {k.scopes && (
                   <span className="text-muted text-xs">
-                    Scopes: <span className="text-purple">{Array.isArray(k.scopes) ? k.scopes.join(', ') : k.scopes}</span>
+                    Области: <span className="text-purple">{Array.isArray(k.scopes) ? k.scopes.join(', ') : k.scopes}</span>
                   </span>
                 )}
               </div>
@@ -318,24 +318,24 @@ function ApiKeysTab() {
       <Modal
         isOpen={createModal}
         onClose={closeCreateModal}
-        title={newKeyValue ? 'Key Created!' : 'Create API Key'}
+        title={newKeyValue ? 'Ключ создан!' : 'Создать API-ключ'}
         actions={
           newKeyValue
             ? [
                 {
-                  label: 'Done',
+                  label: 'Готово',
                   onClick: closeCreateModal,
                   className: 'game-btn game-btn-blue',
                 },
               ]
             : [
                 {
-                  label: 'Cancel',
+                  label: 'Отмена',
                   onClick: closeCreateModal,
                   className: 'game-btn game-btn-red',
                 },
                 {
-                  label: createSubmitting ? 'Creating...' : 'Create',
+                  label: createSubmitting ? 'Создание...' : 'Создать',
                   onClick: createKey,
                   className: 'game-btn game-btn-blue',
                   disabled: createSubmitting || !newKeyName.trim(),
@@ -346,7 +346,7 @@ function ApiKeysTab() {
         {newKeyValue ? (
           <div className="space-y-3">
             <p className="text-muted text-sm">
-              Copy this key now. It will not be shown again!
+              Скопируйте ключ сейчас. Больше он не будет показан!
             </p>
             <div className="flex gap-2">
               <code className="flex-1 bg-navy p-3 rounded border border-accent/30 text-accent text-sm break-all">
@@ -355,7 +355,7 @@ function ApiKeysTab() {
               <button
                 onClick={() => copyToClipboard(newKeyValue)}
                 className="flex-shrink-0 p-2 rounded hover:bg-surface-raised transition-colors"
-                title="Copy"
+                title="Копировать"
               >
                 {copied ? (
                   <Check size={18} className="text-emerald" />
@@ -368,13 +368,13 @@ function ApiKeysTab() {
         ) : (
           <div>
             <label className="block text-cream text-sm font-medium mb-2">
-              Key Name
+              Название ключа
             </label>
             <input
               type="text"
               value={newKeyName}
               onChange={(e) => setNewKeyName(e.target.value)}
-              placeholder="e.g. Mobile App"
+              placeholder="например, Мобильное приложение"
               className="field-input"
             />
           </div>
@@ -403,7 +403,7 @@ function InviteCodesTab() {
       const data = await api('/api/admin/invite-codes');
       setCodes(Array.isArray(data) ? data : (data.codes || []));
     } catch (err) {
-      setError(err.message || 'Failed to load invite codes');
+      setError(err.message || 'Не удалось загрузить коды приглашений');
     } finally {
       setLoading(false);
     }
@@ -424,7 +424,7 @@ function InviteCodesTab() {
       setNewMaxUses('');
       fetchCodes();
     } catch (err) {
-      setError(err.message || 'Failed to create code');
+      setError(err.message || 'Не удалось создать код');
     } finally {
       setCreateSubmitting(false);
     }
@@ -435,7 +435,7 @@ function InviteCodesTab() {
       await api(`/api/admin/invite-codes/${id}`, { method: 'DELETE' });
       setCodes((prev) => prev.filter((c) => c.id !== id));
     } catch (err) {
-      setError(err.message || 'Failed to delete code');
+      setError(err.message || 'Не удалось удалить код');
     }
   };
 
@@ -461,13 +461,13 @@ function InviteCodesTab() {
           className="game-btn game-btn-blue flex items-center gap-2"
         >
           <Plus size={14} />
-          Create Code
+          Создать код
         </button>
       </div>
 
       {codes.length === 0 ? (
         <p className="text-muted text-center py-8 text-sm">
-          No invite codes yet.
+          Кодов приглашений пока нет.
         </p>
       ) : (
         <div className="space-y-3">
@@ -480,17 +480,17 @@ function InviteCodesTab() {
                 <button
                   onClick={() => deleteCode(c.id)}
                   className="p-1.5 rounded hover:bg-crimson/10 text-crimson/60 hover:text-crimson transition-colors flex-shrink-0"
-                  title="Delete code"
+                  title="Удалить код"
                 >
                   <Trash2 size={14} />
                 </button>
               </div>
               <div className="flex flex-wrap gap-x-3 gap-y-1">
                 <span className="text-muted text-xs">
-                  Role: <span className="text-purple">{c.role}</span>
+                  Роль: <span className="text-purple">{c.role}</span>
                 </span>
                 <span className="text-muted text-xs">
-                  Uses:{' '}
+                  Использования:{' '}
                   <span className="text-accent">
                     {c.times_used ?? 0}
                     {c.max_uses ? ` / ${c.max_uses}` : ' / ∞'}
@@ -506,15 +506,15 @@ function InviteCodesTab() {
       <Modal
         isOpen={createModal}
         onClose={() => setCreateModal(false)}
-        title="Create Invite Code"
+        title="Создать код приглашения"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setCreateModal(false),
             className: 'game-btn game-btn-red',
           },
           {
-            label: createSubmitting ? 'Creating...' : 'Create',
+            label: createSubmitting ? 'Создание...' : 'Создать',
             onClick: createCode,
             className: 'game-btn game-btn-blue',
             disabled: createSubmitting,
@@ -524,7 +524,7 @@ function InviteCodesTab() {
         <div className="space-y-4">
           <div>
             <label className="block text-cream text-sm font-medium mb-2">
-              Role
+              Роль
             </label>
             <select
               value={newRole}
@@ -538,14 +538,14 @@ function InviteCodesTab() {
           </div>
           <div>
             <label className="block text-cream text-sm font-medium mb-2">
-              Max Uses (optional)
+              Макс. использований (необязательно)
             </label>
             <input
               type="number"
               min={1}
               value={newMaxUses}
               onChange={(e) => setNewMaxUses(e.target.value)}
-              placeholder="Unlimited"
+              placeholder="Без лимита"
               className="field-input"
             />
           </div>
@@ -570,7 +570,7 @@ function AuditLogTab() {
       const data = await api(`/api/admin/audit-log?limit=${limit}&offset=${offset}`);
       setEntries(Array.isArray(data) ? data : (data.entries || data.logs || []));
     } catch (err) {
-      setError(err.message || 'Failed to load audit log');
+      setError(err.message || 'Не удалось загрузить журнал аудита');
     } finally {
       setLoading(false);
     }
@@ -609,7 +609,7 @@ function AuditLogTab() {
 
       {entries.length === 0 ? (
         <p className="text-muted text-center py-8 text-sm">
-          No audit log entries yet.
+          Записей в журнале аудита пока нет.
         </p>
       ) : (
         <div className="space-y-2">
@@ -620,7 +620,7 @@ function AuditLogTab() {
                 <span className="text-muted text-[10px] flex-shrink-0">{formatTimestamp(entry.created_at)}</span>
               </div>
               <p className="text-muted text-xs break-all">
-                {entry.user_id != null ? `User #${entry.user_id}` : '--'}
+                {entry.user_id != null ? `Пользователь #${entry.user_id}` : '--'}
                 {(entry.details && entry.details !== '--') && (
                   <span className="ml-2 text-muted/70">
                     {typeof entry.details === 'object'
@@ -644,11 +644,11 @@ function AuditLogTab() {
           }`}
         >
           <ChevronLeft size={14} />
-          Prev
+          Назад
         </button>
 
         <span className="text-muted text-xs">
-          Showing {offset + 1} - {offset + entries.length}
+          Показано {offset + 1} - {offset + entries.length}
         </span>
 
         <button
@@ -658,7 +658,7 @@ function AuditLogTab() {
             entries.length < limit ? 'opacity-30 cursor-not-allowed' : ''
           }`}
         >
-          Next
+          Вперёд
           <ChevronRight size={14} />
         </button>
       </div>
@@ -677,10 +677,10 @@ export default function AdminDashboard() {
       <div className="max-w-xl mx-auto text-center py-20">
         <Shield size={48} className="text-crimson/30 mx-auto mb-4" />
         <h1 className="text-cream text-base font-semibold mb-2">
-          Access Denied
+          Доступ запрещён
         </h1>
         <p className="text-muted text-sm">
-          Only administrators can access this page.
+          Только администраторы могут открыть эту страницу.
         </p>
       </div>
     );
@@ -694,12 +694,12 @@ export default function AdminDashboard() {
         className="flex items-center gap-1.5 text-muted hover:text-cream transition-colors mb-4 text-sm"
       >
         <ArrowLeft size={16} />
-        Profile
+        Профиль
       </button>
       <div className="flex items-center gap-3 mb-6">
         <Shield size={24} className="text-accent" />
         <h1 className="text-cream text-lg font-semibold">
-          Admin Dashboard
+          Панель администратора
         </h1>
       </div>
 

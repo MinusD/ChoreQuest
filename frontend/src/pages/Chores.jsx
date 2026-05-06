@@ -28,13 +28,13 @@ import {
 } from 'lucide-react';
 
 const DIFFICULTY_OPTIONS = [
-  { value: 'easy', label: 'Easy', level: 1 },
-  { value: 'medium', label: 'Medium', level: 2 },
-  { value: 'hard', label: 'Hard', level: 3 },
-  { value: 'expert', label: 'Expert', level: 4 },
+  { value: 'easy', label: 'Лёгкий', level: 1 },
+  { value: 'medium', label: 'Средний', level: 2 },
+  { value: 'hard', label: 'Сложный', level: 3 },
+  { value: 'expert', label: 'Эксперт', level: 4 },
 ];
 const DIFFICULTY_LEVEL = { easy: 1, medium: 2, hard: 3, expert: 4 };
-const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const DAY_NAMES = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 const selectClass =
   'bg-navy-light border border-border text-cream p-2 rounded-md text-sm ' +
@@ -59,7 +59,7 @@ function CategoryBadge({ category }) {
   const catName = typeof category === 'object' ? category?.name : category;
   return (
     <span className="inline-block px-2 py-0.5 rounded-md text-xs border bg-surface-raised text-muted border-border capitalize">
-      {catName || 'General'}
+      {catName || 'Общее'}
     </span>
   );
 }
@@ -128,7 +128,7 @@ export default function Chores() {
       const data = await api('/api/chores');
       setChores(Array.isArray(data) ? data : data.chores || data.items || []);
     } catch (err) {
-      setError(err.message || 'Failed to load quests.');
+      setError(err.message || 'Не удалось загрузить квесты.');
     }
   }, []);
 
@@ -200,7 +200,7 @@ export default function Chores() {
       setPhotoFiles((prev) => { const next = { ...prev }; delete next[choreId]; return next; });
       await fetchAll();
     } catch (err) {
-      setError(err.message || 'Failed to complete quest');
+      setError(err.message || 'Не удалось завершить квест');
     } finally {
       setCompletingId(null);
     }
@@ -243,7 +243,7 @@ export default function Chores() {
       setDeleteTarget(null);
       await fetchChores();
     } catch (err) {
-      setError(err.message || 'Failed to remove the quest.');
+      setError(err.message || 'Не удалось удалить квест.');
     } finally {
       setDeleting(false);
     }
@@ -262,7 +262,7 @@ export default function Chores() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <h1 className="text-cream text-lg font-semibold">
-          {isParent ? 'Quest Management' : 'My Quests'}
+          {isParent ? 'Управление квестами' : 'Мои квесты'}
         </h1>
         <div className="flex items-center gap-2">
           {isKid && completedCount > 0 && (
@@ -271,7 +271,7 @@ export default function Chores() {
               className="flex items-center gap-1.5 text-muted hover:text-cream text-sm transition-colors"
             >
               {showCompleted ? <EyeOff size={14} /> : <Eye size={14} />}
-              {showCompleted ? 'Hide' : 'Show'} completed ({completedCount})
+              {showCompleted ? `Скрыть выполненные (${completedCount})` : `Показать выполненные (${completedCount})`}
             </button>
           )}
           {isParent && (
@@ -280,7 +280,7 @@ export default function Chores() {
               className="game-btn game-btn-blue flex items-center gap-1.5"
             >
               <Plus size={14} />
-              Create Quest
+              Создать квест
             </button>
           )}
         </div>
@@ -305,7 +305,7 @@ export default function Chores() {
             }`}
           >
             <ScrollText size={14} />
-            Library
+            Библиотека
             <span className="text-xs text-muted">({libraryChores.length})</span>
           </button>
           <button
@@ -317,7 +317,7 @@ export default function Chores() {
             }`}
           >
             <Zap size={14} />
-            Active
+            Активные
             <span className="text-xs text-muted">({activeChores.length})</span>
           </button>
         </div>
@@ -328,14 +328,14 @@ export default function Chores() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <div className="flex items-center gap-1.5 text-muted">
             <Filter size={14} />
-            <span className="text-sm">Filters:</span>
+            <span className="text-sm">Фильтры:</span>
           </div>
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
             className={selectClass}
           >
-            <option value="">All Categories</option>
+            <option value="">Все категории</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.name}>{cat.name}</option>
             ))}
@@ -345,7 +345,7 @@ export default function Chores() {
             onChange={(e) => setFilterDifficulty(e.target.value)}
             className={selectClass}
           >
-            <option value="">All Difficulties</option>
+            <option value="">Все уровни</option>
             {DIFFICULTY_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
@@ -358,10 +358,10 @@ export default function Chores() {
         <div className="game-panel p-8 text-center">
           <p className="text-muted text-sm">
             {chores.length === 0
-              ? 'No quests created yet.'
+              ? 'Квесты ещё не созданы.'
               : isParent && activeTab === 'active'
-              ? 'No active quests. Assign some from the Library.'
-              : 'No quests match your filters.'}
+              ? 'Нет активных квестов. Назначьте из библиотеки.'
+              : 'Квесты не найдены.'}
           </p>
           {isParent && chores.length === 0 && (
             <button
@@ -369,7 +369,7 @@ export default function Chores() {
               className="game-btn game-btn-blue mt-3 inline-flex items-center gap-1.5"
             >
               <Plus size={14} />
-              Create first quest
+              Создать первый квест
             </button>
           )}
         </div>
@@ -410,7 +410,7 @@ export default function Chores() {
                           setShowCreateModal(true);
                         }}
                         className="p-1 rounded-md hover:bg-surface-raised transition-colors text-muted hover:text-accent"
-                        aria-label="Edit quest"
+                        aria-label="Изменить квест"
                       >
                         <Pencil size={13} />
                       </button>
@@ -420,7 +420,7 @@ export default function Chores() {
                           setDeleteTarget(chore);
                         }}
                         className="p-1 rounded-md hover:bg-surface-raised transition-colors text-muted hover:text-crimson"
-                        aria-label="Delete quest"
+                        aria-label="Удалить квест"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -442,7 +442,7 @@ export default function Chores() {
                 <div className="flex items-center flex-wrap gap-2 mt-auto">
                   <span className="flex items-center gap-1 text-gold font-medium text-sm">
                     <Star size={12} fill="currentColor" />
-                    {chore.points} XP
+                    {chore.points} ОП
                   </span>
                   <DifficultyStars level={chore.difficulty || 1} />
                 </div>
@@ -457,18 +457,18 @@ export default function Chores() {
                   {chore.requires_photo && (
                     <span className="flex items-center gap-1 text-muted text-xs">
                       <Camera size={11} />
-                      Photo
+                      Фото
                     </span>
                   )}
                   {isParent && assignCount > 0 && (
                     <span className="flex items-center gap-1 text-emerald text-xs font-medium">
                       <Users size={11} />
-                      {assignCount} assigned
+                      Назначено: {assignCount}
                     </span>
                   )}
                   {isParent && assignCount === 0 && (
                     <span className="text-muted/60 text-xs">
-                      Unassigned
+                      Не назначен
                     </span>
                   )}
                 </div>
@@ -483,7 +483,7 @@ export default function Chores() {
                     className="game-btn game-btn-gold w-full flex items-center justify-center gap-1.5 !text-xs !py-1.5"
                   >
                     <Users size={12} />
-                    Assign
+                    Назначить
                   </button>
                 )}
 
@@ -496,7 +496,7 @@ export default function Chores() {
                     className="game-btn game-btn-purple w-full flex items-center justify-center gap-1.5 !text-xs !py-1.5"
                   >
                     <Users size={12} />
-                    Manage
+                    Управлять
                   </button>
                 )}
 
@@ -512,7 +512,7 @@ export default function Chores() {
                         <span>
                           {photoFiles[chore.id]
                             ? photoFiles[chore.id].name
-                            : 'Attach proof photo'}
+                            : 'Прикрепить фото'}
                         </span>
                         <input
                           type="file"
@@ -544,12 +544,12 @@ export default function Chores() {
                       {isCompleting ? (
                         <>
                           <Loader2 size={12} className="animate-spin" />
-                          Completing...
+                          Завершение...
                         </>
                       ) : (
                         <>
                           <CheckCircle2 size={12} />
-                          Complete Quest
+                          Завершить квест
                         </>
                       )}
                     </button>
@@ -580,15 +580,15 @@ export default function Chores() {
       <Modal
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        title="Remove Quest"
+        title="Удалить квест"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setDeleteTarget(null),
             className: 'game-btn game-btn-blue',
           },
           {
-            label: deleting ? 'Removing...' : 'Remove',
+            label: deleting ? 'Удаление...' : 'Удалить',
             onClick: handleDelete,
             className: 'game-btn game-btn-red',
             disabled: deleting,
@@ -596,11 +596,11 @@ export default function Chores() {
         ]}
       >
         <p className="text-muted">
-          Are you sure you want to remove{' '}
+          Вы уверены, что хотите удалить{' '}
           <span className="text-cream font-medium">
-            "{themedTitle(deleteTarget?.title || '', colorTheme)}"
+            «{themedTitle(deleteTarget?.title || '', colorTheme)}»
           </span>
-          ? This action cannot be undone.
+          ? Это действие нельзя отменить.
         </p>
       </Modal>
     </div>

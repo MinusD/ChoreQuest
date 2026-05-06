@@ -24,11 +24,11 @@ function timeAgo(dateStr) {
   if (!dateStr) return '';
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return 'только что';
+  if (mins < 60) return `${mins} мин назад`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+  if (hrs < 24) return `${hrs} ч назад`;
+  return `${Math.floor(hrs / 24)} дн назад`;
 }
 
 function ProgressRing({ completed, total, size = 72 }) {
@@ -139,7 +139,7 @@ export default function Party() {
     return (
       <div className="text-center py-20 text-muted">
         <Users size={48} className="mx-auto mb-3 opacity-40" />
-        <p className="text-sm">Could not load party data.</p>
+        <p className="text-sm">Не удалось загрузить данные отряда.</p>
       </div>
     );
   }
@@ -155,7 +155,7 @@ export default function Party() {
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-cream text-lg font-semibold flex items-center gap-2">
             <Users size={20} className="text-purple" />
-            The Party
+            Отряд
           </h1>
           <div className="flex items-center gap-1 text-gold text-sm font-medium">
             <Star size={14} className="fill-gold" />
@@ -168,12 +168,10 @@ export default function Party() {
             <span className="flex items-center gap-2">
               <Flame size={16} className="text-crimson flex-shrink-0" />
               <span className="text-cream text-sm font-medium">
-                Family Streak: {family_streak} day{family_streak !== 1 ? 's' : ''}
+                Семейная серия: {family_streak} дн.
               </span>
             </span>
-            <span className="text-muted text-xs ml-auto">
-              Everyone completed at least one quest!
-            </span>
+            <span className="text-muted text-xs ml-auto">Все выполнили хотя бы одно задание!</span>
           </div>
         )}
       </div>
@@ -185,7 +183,7 @@ export default function Party() {
 
       {/* Members */}
       <div className="game-panel p-4">
-        <h2 className="text-cream text-sm font-semibold mb-3">Heroes</h2>
+        <h2 className="text-cream text-sm font-semibold mb-3">Герои</h2>
         <div className="flex flex-wrap justify-center gap-4">
           {kids.map((kid) => {
             const ringSize = 72;
@@ -212,12 +210,12 @@ export default function Party() {
                     {kid.points_balance} XP
                   </span>
                   <span className="text-muted text-[11px]">
-                    {kid.today_completed || 0}/{kid.today_total || 0} today
+                    {kid.today_completed || 0}/{kid.today_total || 0} сегодня
                   </span>
                   {kid.current_streak > 0 && (
                     <span className="flex items-center gap-0.5 text-crimson text-[11px]">
                       <Flame size={10} />
-                      {kid.current_streak}d streak
+                      {kid.current_streak}д серия
                     </span>
                   )}
                   {/* Pet level */}
@@ -252,7 +250,7 @@ export default function Party() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-cream text-sm font-semibold flex items-center gap-2">
             <Megaphone size={14} className="text-accent" />
-            Bulletin Board
+            Доска объявлений
           </h2>
           {isParent && (
             <button
@@ -260,7 +258,7 @@ export default function Party() {
               className="text-accent text-xs hover:text-accent/80 flex items-center gap-1"
             >
               <Plus size={12} />
-              Post
+              Опубликовать
             </button>
           )}
         </div>
@@ -272,14 +270,14 @@ export default function Party() {
               type="text"
               value={announcementForm.title}
               onChange={e => setAnnouncementForm(f => ({ ...f, title: e.target.value }))}
-              placeholder="Announcement title"
+              placeholder="Заголовок объявления"
               maxLength={200}
               className="field-input !text-sm"
             />
             <textarea
               value={announcementForm.message}
               onChange={e => setAnnouncementForm(f => ({ ...f, message: e.target.value }))}
-              placeholder="What's the news?"
+              placeholder="Какие новости?"
               maxLength={1000}
               rows={2}
               className="field-input !text-sm resize-none"
@@ -293,7 +291,7 @@ export default function Party() {
                   className="rounded border-border"
                 />
                 <Pin size={10} />
-                Pin to top
+                Закрепить сверху
               </label>
               <button
                 onClick={handlePostAnnouncement}
@@ -301,7 +299,7 @@ export default function Party() {
                 className="game-btn game-btn-blue !py-1.5 !px-3 flex items-center gap-1 text-xs"
               >
                 <Send size={12} />
-                {announcementSubmitting ? 'Posting...' : 'Post'}
+                {announcementSubmitting ? 'Публикация...' : 'Опубликовать'}
               </button>
             </div>
           </div>
@@ -309,7 +307,7 @@ export default function Party() {
 
         {announcements.length === 0 ? (
           <p className="text-muted text-sm text-center py-4">
-            No announcements yet.
+            Объявлений пока нет.
           </p>
         ) : (
           <div className="space-y-2">
@@ -336,7 +334,7 @@ export default function Party() {
                     <button
                       onClick={() => handleDeleteAnnouncement(a.id)}
                       className="p-1 text-muted hover:text-crimson transition-colors flex-shrink-0"
-                      title="Delete"
+                      title="Удалить"
                     >
                       <Trash2 size={12} />
                     </button>
@@ -352,12 +350,12 @@ export default function Party() {
       <div className="game-panel p-4">
         <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
           <Sparkles size={14} className="text-gold" />
-          Recent Activity
+          Последняя активность
         </h2>
 
         {activity.length === 0 ? (
           <p className="text-muted text-sm text-center py-6">
-            No activity yet. Complete some quests!
+            Активности пока нет. Выполните несколько заданий!
           </p>
         ) : (
           <div className="space-y-2">

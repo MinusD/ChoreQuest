@@ -26,7 +26,7 @@ export default function UpdatePrompt() {
                    transition-colors"
       >
         <RefreshCw size={16} />
-        Update available — tap to refresh
+        Доступно обновление — нажмите, чтобы обновить
       </button>
     </div>
   );

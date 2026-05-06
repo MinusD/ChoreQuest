@@ -41,7 +41,7 @@ export default function Wishlist() {
       const data = await api('/api/wishlist');
       setItems(data.items || data || []);
     } catch (err) {
-      setError(err.message || 'Failed to load wishlist');
+      setError(err.message || 'Не удалось загрузить список желаний');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ export default function Wishlist() {
       setShowAddForm(false);
       fetchWishlist();
     } catch (err) {
-      setError(err.message || 'Failed to add item');
+      setError(err.message || 'Не удалось добавить пункт');
     } finally {
       setAddSubmitting(false);
     }
@@ -83,7 +83,7 @@ export default function Wishlist() {
       await api(`/api/wishlist/${id}`, { method: 'DELETE' });
       setItems((prev) => prev.filter((item) => item.id !== id));
     } catch (err) {
-      setError(err.message || 'Failed to delete item');
+      setError(err.message || 'Не удалось удалить пункт');
     }
   };
 
@@ -97,7 +97,7 @@ export default function Wishlist() {
   const submitConvert = async () => {
     const cost = parseInt(pointCost, 10);
     if (!cost || cost <= 0) {
-      setConvertError('Enter a valid point cost');
+      setConvertError('Введите корректную стоимость в очках');
       return;
     }
     setConvertSubmitting(true);
@@ -110,7 +110,7 @@ export default function Wishlist() {
       setConvertModal(false);
       fetchWishlist();
     } catch (err) {
-      setConvertError(err.message || 'Conversion failed');
+      setConvertError(err.message || 'Не удалось преобразовать');
     } finally {
       setConvertSubmitting(false);
     }
@@ -120,7 +120,7 @@ export default function Wishlist() {
   const groupedByKid = {};
   if (!isKid) {
     items.forEach((item) => {
-      const kidName = item.user_display_name || item.username || item.user_id || 'Unknown Hero';
+      const kidName = item.user_display_name || item.username || item.user_id || 'Неизвестный герой';
       if (!groupedByKid[kidName]) groupedByKid[kidName] = [];
       groupedByKid[kidName].push(item);
     });
@@ -166,7 +166,7 @@ export default function Wishlist() {
           )}
           {isConverted && (
             <span className="inline-block mt-1 text-emerald text-xs font-medium">
-              Converted to Reward
+              Преобразовано в награду
             </span>
           )}
         </div>
@@ -177,7 +177,7 @@ export default function Wishlist() {
             <button
               onClick={() => openConvert(item)}
               className="game-btn game-btn-purple !py-2 !px-3 !text-[8px]"
-              title="Convert to Reward"
+              title="Преобразовать в награду"
             >
               <Gift size={14} />
             </button>
@@ -186,7 +186,7 @@ export default function Wishlist() {
             <button
               onClick={() => deleteItem(item.id)}
               className="p-2 rounded hover:bg-crimson/10 text-crimson/60 hover:text-crimson transition-colors"
-              title="Delete"
+              title="Удалить"
             >
               <Trash2 size={16} />
             </button>
@@ -202,7 +202,7 @@ export default function Wishlist() {
       <div className="flex items-center justify-between gap-3 mb-6">
         <div className="flex items-center gap-3">
           <h1 className="text-cream text-lg font-semibold">
-            Wish List
+            Список желаний
           </h1>
         </div>
 
@@ -213,7 +213,7 @@ export default function Wishlist() {
             className="game-btn game-btn-blue flex items-center gap-2"
           >
             <Plus size={14} />
-            Add Wish
+            Добавить желание
           </button>
         )}
       </div>
@@ -229,26 +229,26 @@ export default function Wishlist() {
       {isKid && showAddForm && (
         <div className="game-panel p-5 mb-6 space-y-3">
           <h3 className="text-cream text-sm font-semibold mb-3">
-            New Wish
+            Новое желание
           </h3>
           <input
             type="text"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="What do you wish for?"
+            placeholder="Что ты хочешь?"
             className="field-input"
           />
           <input
             type="url"
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
-            placeholder="Link (optional)"
+            placeholder="Ссылка (необязательно)"
             className="field-input"
           />
           <textarea
             value={newNotes}
             onChange={(e) => setNewNotes(e.target.value)}
-            placeholder="Notes (optional)"
+            placeholder="Заметки (необязательно)"
             rows={2}
             className="field-input resize-none"
           />
@@ -257,14 +257,14 @@ export default function Wishlist() {
               onClick={() => setShowAddForm(false)}
               className="game-btn game-btn-red"
             >
-              Cancel
+              Отмена
             </button>
             <button
               onClick={addItem}
               disabled={addSubmitting || !newTitle.trim()}
               className="game-btn game-btn-blue"
             >
-              {addSubmitting ? 'Adding...' : 'Add Wish'}
+              {addSubmitting ? 'Добавление...' : 'Добавить желание'}
             </button>
           </div>
         </div>
@@ -284,7 +284,7 @@ export default function Wishlist() {
             <div className="text-center py-16">
               <Star size={48} className="text-muted mx-auto mb-4" />
               <p className="text-cream text-sm font-semibold">
-                No items yet.
+                Пунктов пока нет.
               </p>
             </div>
           ) : (
@@ -300,7 +300,7 @@ export default function Wishlist() {
             <div className="text-center py-16">
               <Star size={48} className="text-muted mx-auto mb-4" />
               <p className="text-cream text-sm font-semibold">
-                No items yet.
+                Пунктов пока нет.
               </p>
             </div>
           ) : (
@@ -308,7 +308,7 @@ export default function Wishlist() {
               <div key={kidName}>
                 <h2 className="text-cream text-sm font-semibold mb-3 flex items-center gap-2">
                   <Star size={14} className="text-accent" />
-                  {kidName}'s Wishes
+                  Желания: {kidName}
                 </h2>
                 <div className="space-y-3">
                   {kidItems.map((item) => renderItem(item, false, true))}
@@ -323,15 +323,15 @@ export default function Wishlist() {
       <Modal
         isOpen={convertModal}
         onClose={() => setConvertModal(false)}
-        title="Convert to Reward"
+        title="Преобразовать в награду"
         actions={[
           {
-            label: 'Cancel',
+            label: 'Отмена',
             onClick: () => setConvertModal(false),
             className: 'game-btn game-btn-red',
           },
           {
-            label: convertSubmitting ? 'Converting...' : 'Convert',
+            label: convertSubmitting ? 'Преобразование...' : 'Преобразовать',
             onClick: submitConvert,
             className: 'game-btn game-btn-gold',
             disabled: convertSubmitting,
@@ -340,11 +340,11 @@ export default function Wishlist() {
       >
         <div className="space-y-4">
           <p className="text-muted text-sm">
-            Convert{' '}
+            Преобразовать{' '}
             <span className="text-cream font-medium">
               {convertItem?.title}
             </span>{' '}
-            into a redeemable reward:
+            в награду для получения:
           </p>
 
           {convertError && (
@@ -355,14 +355,14 @@ export default function Wishlist() {
 
           <div>
             <label className="block text-gold text-sm font-medium mb-2">
-              Point Cost (XP)
+              Стоимость в очках (XP)
             </label>
             <input
               type="number"
               min="1"
               value={pointCost}
               onChange={(e) => setPointCost(e.target.value)}
-              placeholder="e.g. 500"
+              placeholder="например, 500"
               className="field-input"
             />
           </div>

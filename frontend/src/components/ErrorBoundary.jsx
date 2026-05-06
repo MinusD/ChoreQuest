@@ -33,25 +33,25 @@ export default class ErrorBoundary extends Component {
 
             {/* Title */}
             <h2 className="font-heading text-crimson text-xs mb-3">
-              CRITICAL HIT!
+              КРИТИЧЕСКИЙ УДАР!
             </h2>
 
             {/* Message */}
             <p className="font-body text-cream/80 text-lg mb-2">
-              Something went wrong and the quest has failed.
+              Что-то пошло не так, и задание прервалось.
             </p>
             <p className="font-body text-cream/50 text-base mb-6">
-              An unexpected error knocked out this part of the app. Try again to respawn.
+              Непредвиденная ошибка вывела из строя эту часть приложения. Попробуйте снова.
             </p>
 
             {/* Error details (collapsed) */}
             {this.state.error && (
               <details className="mb-6 text-left">
                 <summary className="font-body text-cream/40 text-sm cursor-pointer hover:text-cream/60 transition-colors">
-                  Error details
+                  Подробности ошибки
                 </summary>
                 <pre className="mt-2 p-3 bg-navy rounded text-crimson/80 text-xs font-mono overflow-x-auto whitespace-pre-wrap break-words">
-                  {this.state.error.message || 'Unknown error'}
+                  {this.state.error.message || 'Неизвестная ошибка'}
                 </pre>
               </details>
             )}
@@ -62,7 +62,7 @@ export default class ErrorBoundary extends Component {
               className="game-btn game-btn-gold inline-flex items-center gap-2"
             >
               <RotateCcw size={14} />
-              Try Again
+              Попробовать снова
             </button>
           </div>
         </div>

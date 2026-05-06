@@ -40,7 +40,7 @@ export default function VacationSettings() {
       setEndDate('');
       fetchVacations();
     } catch (err) {
-      setError(err.message || 'Failed to create vacation');
+      setError(err.message || 'Не удалось запланировать каникулы');
     } finally {
       setSaving(false);
     }
@@ -62,26 +62,26 @@ export default function VacationSettings() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-cream text-sm font-bold flex items-center gap-2">
           <Palmtree size={16} className="text-emerald" />
-          Vacation Mode
+          Режим каникул
         </h2>
         <button
           onClick={() => setShowForm((v) => !v)}
           className="text-xs text-accent hover:text-accent-light transition-colors font-medium flex items-center gap-1"
         >
           <Plus size={12} />
-          {showForm ? 'Cancel' : 'Schedule'}
+          {showForm ? 'Отмена' : 'Запланировать'}
         </button>
       </div>
 
       <p className="text-muted text-xs mb-3">
-        During vacation, recurring quests are paused and streaks are preserved.
+        Во время каникул повторяющиеся задания ставятся на паузу, а серии сохраняются.
       </p>
 
       {showForm && (
         <div className="mb-4 p-3 rounded-lg bg-surface-raised/50 border border-border/50 space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-muted text-[10px] font-semibold uppercase">Start</label>
+              <label className="text-muted text-[10px] font-semibold uppercase">Начало</label>
               <input
                 type="date"
                 value={startDate}
@@ -91,7 +91,7 @@ export default function VacationSettings() {
               />
             </div>
             <div>
-              <label className="text-muted text-[10px] font-semibold uppercase">End</label>
+              <label className="text-muted text-[10px] font-semibold uppercase">Конец</label>
               <input
                 type="date"
                 value={endDate}
@@ -108,7 +108,7 @@ export default function VacationSettings() {
             className="game-btn game-btn-blue w-full flex items-center justify-center gap-1.5"
           >
             {saving ? <Loader2 size={12} className="animate-spin" /> : <Palmtree size={12} />}
-            Schedule Vacation
+            Запланировать каникулы
           </button>
         </div>
       )}
@@ -119,7 +119,7 @@ export default function VacationSettings() {
         </div>
       ) : vacations.length === 0 ? (
         <p className="text-muted text-xs text-center py-2">
-          No vacations scheduled.
+          Каникулы не запланированы.
         </p>
       ) : (
         <div className="space-y-2">
@@ -143,7 +143,7 @@ export default function VacationSettings() {
                   </p>
                   {isActive && (
                     <p className="text-emerald text-[10px] font-semibold uppercase mt-0.5">
-                      Active now
+                      Сейчас активно
                     </p>
                   )}
                 </div>
@@ -151,7 +151,7 @@ export default function VacationSettings() {
                   <button
                     onClick={() => cancel(v.id)}
                     className="text-muted hover:text-crimson transition-colors p-1"
-                    title="Cancel vacation"
+                    title="Отменить каникулы"
                   >
                     <Trash2 size={14} />
                   </button>

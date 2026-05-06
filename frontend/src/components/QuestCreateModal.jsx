@@ -10,10 +10,10 @@ import {
 } from 'lucide-react';
 
 const DIFFICULTY_OPTIONS = [
-  { value: 'easy', label: 'Easy', level: 1 },
-  { value: 'medium', label: 'Medium', level: 2 },
-  { value: 'hard', label: 'Hard', level: 3 },
-  { value: 'expert', label: 'Expert', level: 4 },
+  { value: 'easy', label: 'Лёгкая', level: 1 },
+  { value: 'medium', label: 'Средняя', level: 2 },
+  { value: 'hard', label: 'Сложная', level: 3 },
+  { value: 'expert', label: 'Эксперт', level: 4 },
 ];
 
 const selectClass =
@@ -88,15 +88,15 @@ export default function QuestCreateModal({
 
   const handleSubmit = async () => {
     if (!form.title.trim()) {
-      setFormError('Every quest needs a name, adventurer!');
+      setFormError('Каждому заданию нужно название!');
       return;
     }
     if (form.points < 1) {
-      setFormError('The reward must be at least 1 XP.');
+      setFormError('Награда должна быть не менее 1 XP.');
       return;
     }
     if (!form.category_id) {
-      setFormError('Please select a category for this quest.');
+      setFormError('Выберите категорию для этого задания.');
       return;
     }
 
@@ -124,7 +124,7 @@ export default function QuestCreateModal({
       onCreated();
       onClose();
     } catch (err) {
-      setFormError(err.message || 'The quest scroll could not be saved.');
+      setFormError(err.message || 'Не удалось сохранить задание.');
     } finally {
       setSubmitting(false);
     }
@@ -132,7 +132,7 @@ export default function QuestCreateModal({
 
   // Group templates by category
   const templatesByCategory = templates.reduce((acc, tpl) => {
-    const cat = tpl.category_name || 'Other';
+    const cat = tpl.category_name || 'Другое';
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(tpl);
     return acc;
@@ -142,11 +142,11 @@ export default function QuestCreateModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={editingChore ? 'Edit Quest Scroll' : 'New Quest Scroll'}
+      title={editingChore ? 'Редактировать свиток задания' : 'Новый свиток задания'}
       actions={[
-        { label: 'Cancel', onClick: onClose, className: 'game-btn game-btn-blue' },
+        { label: 'Отмена', onClick: onClose, className: 'game-btn game-btn-blue' },
         {
-          label: submitting ? 'Saving...' : editingChore ? 'Update Quest' : 'Create Quest',
+          label: submitting ? 'Сохранение...' : editingChore ? 'Обновить задание' : 'Создать задание',
           onClick: handleSubmit,
           className: 'game-btn game-btn-gold',
           disabled: submitting,
@@ -169,7 +169,7 @@ export default function QuestCreateModal({
               className="flex items-center gap-2 text-accent text-sm hover:text-accent/80 transition-colors"
             >
               <BookTemplate size={14} />
-              {showTemplates ? 'Hide templates' : 'Choose from Quest Templates'}
+              {showTemplates ? 'Скрыть шаблоны' : 'Выбрать из шаблонов заданий'}
             </button>
 
             {showTemplates && (
@@ -207,7 +207,7 @@ export default function QuestCreateModal({
                 ))}
                 {templates.length === 0 && (
                   <p className="text-muted text-xs text-center py-3">
-                    No templates available yet.
+                    Шаблоны пока недоступны.
                   </p>
                 )}
               </div>
@@ -218,13 +218,13 @@ export default function QuestCreateModal({
         {/* Title */}
         <div>
           <label className="block text-cream text-sm font-medium mb-1 tracking-wide">
-            Quest Name
+            Название задания
           </label>
           <input
             type="text"
             value={form.title}
             onChange={(e) => updateForm('title', e.target.value)}
-            placeholder="Defeat the Dust Bunnies"
+            placeholder="Победить пыльных монстров"
             className="field-input"
           />
         </div>
@@ -232,12 +232,12 @@ export default function QuestCreateModal({
         {/* Description */}
         <div>
           <label className="block text-cream text-sm font-medium mb-1 tracking-wide">
-            Description
+            Описание
           </label>
           <textarea
             value={form.description}
             onChange={(e) => updateForm('description', e.target.value)}
-            placeholder="Describe the quest details..."
+            placeholder="Опишите детали задания..."
             rows={3}
             className="field-input resize-none"
           />
@@ -247,7 +247,7 @@ export default function QuestCreateModal({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-cream text-sm font-medium mb-1 tracking-wide">
-              XP Reward
+              Награда XP
             </label>
             <input
               type="number"
@@ -259,7 +259,7 @@ export default function QuestCreateModal({
           </div>
           <div>
             <label className="block text-cream text-sm font-medium mb-1 tracking-wide">
-              Difficulty
+              Сложность
             </label>
             <select
               value={form.difficulty}
@@ -278,14 +278,14 @@ export default function QuestCreateModal({
         {/* Category */}
         <div>
           <label className="block text-cream text-sm font-medium mb-1 tracking-wide">
-            Category
+            Категория
           </label>
           <select
             value={form.category_id}
             onChange={(e) => updateForm('category_id', e.target.value)}
             className={`${selectClass} w-full p-3`}
           >
-            <option value="">Select category...</option>
+            <option value="">Выберите категорию...</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}

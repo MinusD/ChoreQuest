@@ -12,124 +12,124 @@ const GIRL_THEME_IDS = new Set(
 
 const ENCHANTED_MAP = {
   'The Chamber of Rest': {
-    title: 'The Royal Chambers',
+    title: 'Королевские покои',
     description:
-      'Enter your royal chambers and restore the kingdom\'s beauty. Arrange the pillows, smooth the silken blankets, and create a haven fit for a princess.',
+      'Войди в королевские покои и верни им блеск. Расправь подушки, поправь шелковые одеяла и создай уют, достойный принцессы.',
   },
   "Dishwasher's Oath": {
-    title: 'The Crystal Goblet Ceremony',
+    title: 'Церемония хрустальных кубков',
     description:
-      'The crystal goblets and enchanted plates from the royal banquet await your care. Polish each treasure and return it to its rightful place in the palace cupboards.',
+      'Хрустальные кубки и волшебные тарелки после королевского пира ждут твоей заботы. Начисти каждую драгоценность и верни на место в дворцовый шкаф.',
   },
   "The Scholar's Burden": {
-    title: 'The Academy Scrolls',
+    title: 'Свитки академии',
     description:
-      'The Royal Academy has sent scrolls of wisdom for your study. Sit at your enchanted desk, open your spellbooks, and master the magical lessons within.',
+      'Королевская академия прислала свитки мудрости. Сядь за волшебный стол, открой учебные книги заклинаний и освой магические уроки.',
   },
   'Cauldron Duty': {
-    title: 'The Royal Feast',
+    title: 'Королевский пир',
     description:
-      'The palace feast must be prepared! Help the Royal Chef arrange the ingredients, stir the magical broth, and set the grand table for the royal court.',
+      'Дворцовый пир нужно подготовить. Помоги королевскому повару разложить ингредиенты, помешай волшебный бульон и накрой большой стол для двора.',
   },
   'The Folding Ritual': {
-    title: 'The Enchanted Wardrobe',
+    title: 'Зачарованный гардероб',
     description:
-      'Freshly enchanted garments have arrived from the Fairy Laundress. Sort them by colour, fold them with care, and deliver them to each royal wardrobe.',
+      'От феи-прачки прибыли свежие зачарованные наряды. Разбери их по цветам, аккуратно сложи и разнеси по королевским шкафам.',
   },
   "Beast Keeper's Round": {
-    title: 'Royal Pet Care',
+    title: 'Забота о королевских питомцах',
     description:
-      'The royal pets and magical creatures need your gentle care. Fill their crystal bowls, refresh their enchanted waters, and tidy their cosy nests.',
+      'Королевским питомцам и волшебным существам нужна твоя забота. Наполни их хрустальные миски, обнови воду и приведи в порядок уютные лежанки.',
   },
   'Garden of the Ancients': {
-    title: 'The Enchanted Gardens',
+    title: 'Зачарованные сады',
     description:
-      'The enchanted palace gardens await a gentle hand. Tend the fairy roses, water the wishing flowers, and sweep the sparkling garden paths.',
+      'Зачарованные дворцовые сады ждут заботливых рук. Ухаживай за розами фей, полей цветы желаний и подмети сверкающие дорожки.',
   },
   'The Porcelain Throne': {
-    title: 'The Royal Bathhouse',
+    title: 'Королевская купальня',
     description:
-      'The Royal Bathhouse needs your attention! Polish the enchanted mirrors, scrub the crystal basin, and make everything sparkle like starlight.',
+      'Королевской купальне нужна твоя помощь. Отполируй волшебные зеркала, отмой хрустальный умывальник и доведи всё до сияния.',
   },
   'Sweeping the Great Hall': {
-    title: 'Sparkling the Ballroom',
+    title: 'Сияние бального зала',
     description:
-      'Fairy dust and stardust have settled in the grand ballroom. Take up your enchanted broom and restore the floors to their sparkling splendour.',
+      'Фейская и звездная пыль осела в большом бальном зале. Возьми волшебную метлу и верни полу прежний блеск.',
   },
   "Merchant's Errand": {
-    title: 'Market Day Adventure',
+    title: 'Приключение на рыночный день',
     description:
-      'The palace needs supplies from the village! Accompany the Royal Steward on this exciting journey through the enchanted marketplace.',
+      'Дворцу нужны припасы из деревни. Отправляйся с королевским управляющим в увлекательный путь по волшебному рынку.',
   },
   'The Royal Table': {
-    title: 'The Grand Tea Party',
+    title: 'Большое чаепитие',
     description:
-      'The enchanted tea party awaits but the table is bare! Set out the fairy china, arrange the crystal goblets, and prepare the grand hall for the royal gathering.',
+      'Волшебное чаепитие уже близко, а стол пуст. Расставь изящную посуду, разложи хрустальные кубки и подготовь зал к королевскому приему.',
   },
   'Bin Banishment': {
-    title: 'The Vanishing Spell',
+    title: 'Заклинание исчезновения',
     description:
-      'Unwanted things are cluttering the palace! Gather them into enchanted sacks and cast them beyond the castle gates before they attract mischievous pixies.',
+      'Ненужные вещи захламляют дворец. Собери их в волшебные мешки и вынеси за ворота замка, пока они не привлекли озорных пикси.',
   },
   'The Dawn Ritual': {
-    title: 'Morning Star Sparkle',
+    title: 'Утренняя звездная улыбка',
     description:
-      'As the morning star rises over the kingdom, visit the Enchanted Basin to polish your smile. Two minutes of sparkling keeps the fairy glow bright all day.',
+      'Когда над королевством поднимается утренняя звезда, загляни к зачарованному умывальнику и почисти зубы. Две минуты сияния поддержат волшебный блеск на весь день.',
   },
   'The Twilight Ritual': {
-    title: 'Moonlight Sparkle',
+    title: 'Лунное сияние',
     description:
-      'Before the sandman visits, return to the Enchanted Basin. Brush away the day\'s adventures and let your smile sparkle under the moonlight.',
+      'Перед сном вернись к зачарованному умывальнику. Сотри щеткой следы дневных приключений и дай улыбке засиять под луной.',
   },
   "The Warrior's Cleanse": {
-    title: 'The Crystal Waterfall',
+    title: 'Хрустальный водопад',
     description:
-      'Step beneath the Crystal Waterfall, wash away the day\'s adventures, and emerge sparkling and refreshed, ready for enchanted dreams.',
+      'Встань под хрустальный водопад, смой усталость дня и выйди свежей и сияющей, готовой к волшебным снам.',
   },
   'Armour Up': {
-    title: 'Royal Dress-Up',
+    title: 'Королевский наряд',
     description:
-      'A princess is always prepared! Choose your finest attire from the enchanted wardrobe, dress with elegance, and present yourself to the royal court.',
+      'Принцесса всегда готова. Выбери лучший наряд из зачарованного гардероба, оденься с изяществом и покажись королевскому двору.',
   },
   "The Scholar's Pack": {
-    title: 'The Princess Satchel',
+    title: 'Сумка принцессы',
     description:
-      'Before the Academy bells chime, gather your enchanted quills, stardust notebooks, and spellbooks. Pack your satchel for a magical day of learning.',
+      'До звонка в академии собери волшебные перья, тетради со звездной пылью и книги заклинаний. Сложи всё в сумку для магического учебного дня.',
   },
   "The Hound's March": {
-    title: 'Magical Creature Walk',
+    title: 'Прогулка с волшебным существом',
     description:
-      'Your loyal companion longs for a stroll through the enchanted grounds. Attach the silken lead and explore the fairy paths together.',
+      'Твой верный спутник мечтает о прогулке по зачарованным тропам. Пристегни поводок и отправляйтесь исследовать сказочные дорожки вместе.',
   },
   "Dragon's Den Duty": {
-    title: "Creature's Cosy Corner",
+    title: 'Уютный уголок питомца',
     description:
-      'Your magical pet\'s enchanted corner needs freshening up. Fluff the bedding, tidy the space, and make it a worthy retreat for your beloved companion.',
+      'Зачарованному уголку твоего питомца нужна уборка. Взбей подстилку, наведи порядок и сделай место уютным для любимого спутника.',
   },
   'The Sacred Water Bowl': {
-    title: 'The Crystal Fountain',
+    title: 'Хрустальный фонтан',
     description:
-      'The crystal fountain that sustains your magical companion has run dry. Rinse it clean, refill with sparkling spring water, and watch them drink happily.',
+      'Хрустальный фонтанчик питомца опустел. Промой его, налей свежую воду и порадуйся, как довольный друг пьет.',
   },
   "Tome Reader's Quest": {
-    title: 'Story Time in the Tower',
+    title: 'Чтение в башне',
     description:
-      'The tower library holds enchanted tales and fairy stories! Find a cosy nook, open a book of your choosing, and read for twenty magical minutes.',
+      'В библиотеке башни хранятся волшебные сказки и истории. Найди уютный уголок, открой книгу и читай двадцать магических минут.',
   },
   "Bard's Practice": {
-    title: 'Fairy Song Practice',
+    title: 'Репетиция песни фей',
     description:
-      'The fairy flowers only bloom to beautiful melodies. Take up your instrument, practise the enchanted songs, and fill the palace with music.',
+      'Цветы фей распускаются только под красивую мелодию. Возьми инструмент, потренируй волшебные песни и наполни дворец музыкой.',
   },
   'Spell Studies': {
-    title: 'Enchantment Studies',
+    title: 'Уроки чар',
     description:
-      'The Royal Academy requires you to learn this week\'s enchantments. Review your spelling scrolls and practise each magical word until it sparkles.',
+      'Королевская академия ждет, что ты выучишь чары этой недели. Повтори свитки правописания и отработай каждое волшебное слово.',
   },
   'The Lawn Guardian': {
-    title: "Garden Fairy's Task",
+    title: 'Задание садовой феи',
     description:
-      'The enchanted meadows around the palace have grown wild with fairy grass. Summon the magical mower and restore the sparkling green fields to order.',
+      'Зачарованные луга вокруг дворца заросли травой фей. Возьми волшебную косилку и верни сверкающим полянам порядок.',
   },
 };
 

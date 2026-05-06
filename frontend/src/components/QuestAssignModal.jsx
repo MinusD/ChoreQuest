@@ -17,18 +17,18 @@ import {
 } from 'lucide-react';
 
 const FREQUENCY_OPTIONS = [
-  { value: 'once', label: 'One-time' },
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'fortnightly', label: 'Fortnightly' },
+  { value: 'once', label: 'Один раз' },
+  { value: 'daily', label: 'Ежедневно' },
+  { value: 'weekly', label: 'Еженедельно' },
+  { value: 'fortnightly', label: 'Раз в две недели' },
 ];
 const ROTATION_CADENCE_OPTIONS = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'fortnightly', label: 'Fortnightly' },
-  { value: 'monthly', label: 'Monthly' },
+  { value: 'daily', label: 'Ежедневно' },
+  { value: 'weekly', label: 'Еженедельно' },
+  { value: 'fortnightly', label: 'Раз в две недели' },
+  { value: 'monthly', label: 'Ежемесячно' },
 ];
-const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const DAY_NAMES = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
 const selectClass =
   'bg-navy-light border border-border text-cream p-2 rounded text-sm ' +
@@ -216,7 +216,7 @@ export default function QuestAssignModal({
       onAssigned();
       onClose();
     } catch (err) {
-      setError(err.message || 'Failed to assign quest.');
+      setError(err.message || 'Не удалось назначить задание.');
     } finally {
       setSubmitting(false);
     }
@@ -245,17 +245,17 @@ export default function QuestAssignModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Quest Assignment Scroll"
+      title="Свиток назначения задания"
       actions={[
-        { label: 'Cancel', onClick: onClose, className: 'game-btn game-btn-blue' },
+        { label: 'Отмена', onClick: onClose, className: 'game-btn game-btn-blue' },
         {
           label: submitting
-            ? 'Saving...'
+            ? 'Сохранение...'
             : isUnassigningAll
-            ? 'Unassign All'
+            ? 'Снять все назначения'
             : selectedCount === 0
-            ? 'Save'
-            : 'Assign Quest',
+            ? 'Сохранить'
+            : 'Назначить задание',
           onClick: handleSubmit,
           className: isUnassigningAll ? 'game-btn game-btn-red' : 'game-btn game-btn-gold',
           disabled: submitting,
@@ -288,7 +288,7 @@ export default function QuestAssignModal({
         <div>
           <label className="flex items-center gap-2 text-cream text-sm font-medium mb-2">
             <Users size={14} />
-            Select Heroes
+            Выбрать героев
           </label>
           <div className="space-y-2">
             {kids.map((kid) => {
@@ -342,7 +342,7 @@ export default function QuestAssignModal({
                       <div className="flex items-center justify-between">
                         <label className="text-muted text-xs font-medium flex items-center gap-1.5">
                           <Camera size={12} />
-                          Photo Proof
+                          Фото-подтверждение
                         </label>
                         <button
                           type="button"
@@ -378,7 +378,7 @@ export default function QuestAssignModal({
         {/* Unassign warning */}
         {isUnassigningAll && (
           <div className="p-3 rounded-lg border border-crimson/30 bg-crimson/10 text-crimson text-sm">
-            No heroes selected. Saving will remove all assignments from this quest.
+            Герои не выбраны. Сохранение удалит все назначения этого задания.
           </div>
         )}
 
@@ -387,15 +387,15 @@ export default function QuestAssignModal({
           <div className="p-3 rounded-lg border border-border bg-surface-raised/20 space-y-3">
             <label className="text-cream text-sm font-medium flex items-center gap-2">
               <CalendarDays size={14} />
-              Schedule
+              Расписание
             </label>
 
             {/* Frequency dropdown */}
             <div>
               <label className="block text-muted text-xs font-medium mb-1">
-                Frequency
+                Частота
                 {hasDaysSelected && (
-                  <span className="text-accent ml-1">(overridden by quest days)</span>
+                  <span className="text-accent ml-1">(переопределено днями задания)</span>
                 )}
               </label>
               <select
@@ -415,8 +415,8 @@ export default function QuestAssignModal({
             {/* Day picker */}
             <div>
               <label className="block text-muted text-xs font-medium mb-1">
-                Quest Days
-                <span className="text-muted/60 ml-1">(optional)</span>
+                Дни задания
+                <span className="text-muted/60 ml-1">(необязательно)</span>
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {DAY_NAMES.map((day, idx) => (
@@ -436,8 +436,8 @@ export default function QuestAssignModal({
               </div>
               <p className="text-muted text-xs mt-1">
                 {hasDaysSelected
-                  ? `Quest appears on ${scheduleDays.slice().sort((a, b) => a - b).map((d) => DAY_NAMES[d]).join(', ')}.`
-                  : 'Pick specific days, or leave empty to use the frequency above.'}
+                  ? `Задание появляется в дни: ${scheduleDays.slice().sort((a, b) => a - b).map((d) => DAY_NAMES[d]).join(', ')}.`
+                  : 'Выберите конкретные дни или оставьте пустым для частоты выше.'}
               </p>
             </div>
           </div>
@@ -449,7 +449,7 @@ export default function QuestAssignModal({
             <div className="flex items-center justify-between">
               <label className="text-cream text-sm font-medium flex items-center gap-2">
                 <Camera size={14} />
-                Require Photo Proof
+                Требовать фото-подтверждение
               </label>
               <button
                 type="button"
@@ -475,10 +475,10 @@ export default function QuestAssignModal({
             </div>
             <p className="text-muted text-xs mt-1">
               {allSelectedHavePhoto
-                ? 'All heroes must attach a photo when completing this quest.'
+                ? 'Все герои должны прикрепить фото при выполнении задания.'
                 : someSelectedHavePhoto
-                ? 'Some heroes require photo proof. Expand individual settings to adjust.'
-                : 'Heroes can complete this quest without attaching a photo.'}
+                ? 'Некоторым героям нужно фото-подтверждение. Откройте настройки героя для изменения.'
+                : 'Герои могут выполнить задание без прикрепления фото.'}
             </p>
           </div>
         )}
@@ -489,7 +489,7 @@ export default function QuestAssignModal({
             <div className="flex items-center justify-between">
               <label className="text-cream text-sm font-medium flex items-center gap-2">
                 <RotateCw size={14} />
-                Kid Rotation
+                Ротация героев
               </label>
               <button
                 type="button"
@@ -508,13 +508,13 @@ export default function QuestAssignModal({
               </button>
             </div>
             <p className="text-muted text-xs">
-              Alternate which hero is assigned. The schedule above controls when the quest appears.
+              Чередует назначаемого героя. Расписание выше определяет, когда появляется задание.
             </p>
             {rotationEnabled && (
               <div className="space-y-3">
                 <div>
                   <label className="block text-muted text-xs font-medium mb-1">
-                    Swap Every
+                    Менять каждые
                   </label>
                   <select
                     value={rotationCadence}
@@ -530,7 +530,7 @@ export default function QuestAssignModal({
                 </div>
                 <div>
                   <label className="block text-muted text-xs font-medium mb-1">
-                    Starts With
+                    Начинается с
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {selectedKids.map(([kidId]) => {
@@ -560,7 +560,7 @@ export default function QuestAssignModal({
                     })}
                   </div>
                   <p className="text-muted text-xs mt-1">
-                    This hero gets the quest first, then it rotates.
+                    Этот герой получает задание первым, затем назначение ротируется.
                   </p>
                 </div>
               </div>

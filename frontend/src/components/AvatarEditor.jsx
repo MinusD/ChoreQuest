@@ -8,21 +8,21 @@ import { renderPet, renderPetExtras, buildPetColors } from './avatar/pets';
 import { Save, Loader2, ChevronLeft, ChevronRight, Lock, Heart, Star, Crosshair, ArrowLeft } from 'lucide-react';
 
 const HEAD_OPTIONS = [
-  { id: 'round', label: 'Round' },
-  { id: 'oval', label: 'Oval' },
-  { id: 'square', label: 'Square' },
-  { id: 'diamond', label: 'Diamond' },
-  { id: 'heart', label: 'Heart' },
-  { id: 'long', label: 'Long' },
-  { id: 'triangle', label: 'Triangle' },
-  { id: 'pear', label: 'Pear' },
-  { id: 'wide', label: 'Wide' },
+  { id: 'round', label: 'Круглая' },
+  { id: 'oval', label: 'Овальная' },
+  { id: 'square', label: 'Квадратная' },
+  { id: 'diamond', label: 'Ромб' },
+  { id: 'heart', label: 'Сердце' },
+  { id: 'long', label: 'Длинная' },
+  { id: 'triangle', label: 'Треугольная' },
+  { id: 'pear', label: 'Грушевидная' },
+  { id: 'wide', label: 'Широкая' },
 ];
 
 const HAIR_OPTIONS = [
-  { id: 'none', label: 'None' },
-  { id: 'short', label: 'Short' },
-  { id: 'long', label: 'Long' },
+  { id: 'none', label: 'Нет' },
+  { id: 'short', label: 'Короткие' },
+  { id: 'long', label: 'Длинные' },
   { id: 'spiky', label: 'Spiky' },
   { id: 'curly', label: 'Curly' },
   { id: 'mohawk', label: 'Mohawk' },
@@ -606,9 +606,9 @@ function CategoryContent({ category, config, set, lockedByCategory, onPreview, o
     case 'hair':
       return (
         <div className="space-y-3">
-          <p className="text-muted text-xs font-medium">Style</p>
+          <p className="text-muted text-xs font-medium">Стиль</p>
           <ShapeSelector options={HAIR_OPTIONS} selected={config.hair} onSelect={(v) => set('hair', v)} lockedItems={locked} configKey="hair" {...previewProps} />
-          <p className="text-muted text-xs font-medium">Colour</p>
+          <p className="text-muted text-xs font-medium">Цвет</p>
           <ColorSwatch colors={HAIR_COLORS} selected={config.hair_color} onSelect={(v) => set('hair_color', v)} />
         </div>
       );
@@ -670,7 +670,7 @@ function CategoryContent({ category, config, set, lockedByCategory, onPreview, o
     case 'face':
       return (
         <div className="space-y-3">
-          <p className="text-muted text-xs font-medium">Extra</p>
+          <p className="text-muted text-xs font-medium">Дополнительно</p>
           <ShapeSelector options={FACE_EXTRA_OPTIONS} selected={config.face_extra} onSelect={(v) => set('face_extra', v)} lockedItems={locked} configKey="face_extra" {...previewProps} />
         </div>
       );
@@ -693,14 +693,14 @@ function CategoryContent({ category, config, set, lockedByCategory, onPreview, o
       };
       return (
         <div className="space-y-3">
-          <p className="text-muted text-xs font-medium">Gear <span className="text-muted/50">(select multiple)</span></p>
+          <p className="text-muted text-xs font-medium">Снаряжение <span className="text-muted/50">(можно выбрать несколько)</span></p>
           <MultiShapeSelector options={ACCESSORY_OPTIONS} selected={currentAccessories} onToggle={toggleAccessory} lockedItems={locked} configKey="accessory" {...previewProps} />
           {currentAccessories.length > 0 && (
             <button onClick={clearAll} className="text-[10px] text-crimson hover:text-crimson/80 transition-colors">
-              Clear all gear
+              Очистить всё снаряжение
             </button>
           )}
-          <p className="text-muted text-xs font-medium">Colour</p>
+          <p className="text-muted text-xs font-medium">Цвет</p>
           <ColorSwatch colors={ACCESSORY_COLORS} selected={config.accessory_color} onSelect={(v) => set('accessory_color', v)} />
         </div>
       );
@@ -755,7 +755,7 @@ function CategoryStrip({ openCategory, onSelect }) {
         <button
           onClick={() => scroll(-1)}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-surface/90 border border-border text-muted hover:text-cream"
-          aria-label="Scroll left"
+          aria-label="Прокрутить влево"
         >
           <ChevronLeft size={14} />
         </button>
@@ -786,7 +786,7 @@ function CategoryStrip({ openCategory, onSelect }) {
         <button
           onClick={() => scroll(1)}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-surface/90 border border-border text-muted hover:text-cream"
-          aria-label="Scroll right"
+          aria-label="Прокрутить вправо"
         >
           <ChevronRight size={14} />
         </button>
@@ -881,10 +881,10 @@ export default function AvatarEditor() {
     try {
       const res = await api('/api/avatar', { method: 'PUT', body: { config } });
       updateUser({ avatar_config: res.avatar_config || config });
-      setMsg('Saved!');
+      setMsg('Сохранено!');
       setTimeout(() => goBack(), 600);
     } catch (err) {
-      setMsg(err.message || 'Failed to save');
+      setMsg(err.message || 'Не удалось сохранить');
     } finally {
       setSaving(false);
       setTimeout(() => setMsg(''), 3000);
@@ -900,11 +900,11 @@ export default function AvatarEditor() {
             <button
               onClick={goBack}
               className="p-1.5 rounded-lg hover:bg-surface-raised transition-colors text-muted hover:text-cream"
-              aria-label="Back"
+              aria-label="Назад"
             >
               <ArrowLeft size={18} />
             </button>
-            <h2 className="font-heading text-cream text-sm font-semibold">Customise Avatar</h2>
+            <h2 className="font-heading text-cream text-sm font-semibold">Настроить аватар</h2>
           </div>
           <button
             onClick={save}
@@ -912,7 +912,7 @@ export default function AvatarEditor() {
             className="game-btn game-btn-blue flex items-center gap-1.5 !py-1.5 !px-4 !text-xs"
           >
             {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            {saving ? 'Saving...' : msg || 'Save'}
+            {saving ? 'Сохранение...' : msg || 'Сохранить'}
           </button>
         </div>
         <div className="flex justify-center">

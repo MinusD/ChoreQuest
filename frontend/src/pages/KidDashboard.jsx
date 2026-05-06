@@ -48,15 +48,15 @@ function todayISO() {
 function difficultyLabel(difficulty) {
   switch (difficulty) {
     case 'easy':
-      return { text: 'Easy', color: 'text-emerald bg-emerald/10 border-emerald/20' };
+      return { text: 'Лёгкий', color: 'text-emerald bg-emerald/10 border-emerald/20' };
     case 'medium':
-      return { text: 'Medium', color: 'text-gold bg-gold/10 border-gold/20' };
+      return { text: 'Средний', color: 'text-gold bg-gold/10 border-gold/20' };
     case 'hard':
-      return { text: 'Hard', color: 'text-orange-400 bg-orange-400/10 border-orange-400/20' };
+      return { text: 'Сложный', color: 'text-orange-400 bg-orange-400/10 border-orange-400/20' };
     case 'expert':
-      return { text: 'Expert', color: 'text-crimson bg-crimson/10 border-crimson/20' };
+      return { text: 'Эксперт', color: 'text-crimson bg-crimson/10 border-crimson/20' };
     default:
-      return { text: 'Easy', color: 'text-emerald bg-emerald/10 border-emerald/20' };
+      return { text: 'Лёгкий', color: 'text-emerald bg-emerald/10 border-emerald/20' };
   }
 }
 
@@ -144,7 +144,7 @@ export default function KidDashboard() {
 
       setSpinAvailability(spinRes);
     } catch (err) {
-      setError(err.message || 'Failed to load quest data');
+      setError(err.message || 'Не удалось загрузить данные заданий');
     } finally {
       setLoading(false);
     }
@@ -173,14 +173,15 @@ export default function KidDashboard() {
     try {
       const res = await api('/api/pets/interact', { method: 'POST', body: { action } });
       setInteractionsRemaining(res.interactions_remaining);
-      const labels = { feed: 'Fed', pet: 'Petted', play: 'Played with' };
-      setPetMessage(`${labels[action]} your pet! +${res.xp_awarded} XP${res.levelup ? ' - LEVEL UP!' : ''}`);
+      const labels = { feed: 'Покормили', pet: 'Погладили', play: 'Поиграли с' };
+      const petSuffix = { feed: 'питомца', pet: 'питомца', play: 'питомцем' };
+      setPetMessage(`${labels[action]} ${petSuffix[action]}! +${res.xp_awarded} ОП${res.levelup ? ' - ПОВЫШЕНИЕ УРОВНЯ!' : ''}`);
       if (res.levelup) setShowConfetti(true);
       // Update points in header immediately
       if (res.new_balance != null) updateUser({ points_balance: res.new_balance });
       await fetchData();
     } catch (err) {
-      setPetMessage(err.message || 'Could not interact with pet');
+      setPetMessage(err.message || 'Не удалось взаимодействовать с питомцем');
     } finally {
       setPetInteracting(null);
       setTimeout(() => { setPetAction(null); setPetMessage(''); }, 4000);
@@ -227,12 +228,12 @@ export default function KidDashboard() {
         <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
           <div className="flex items-center gap-2">
             <h1 className="text-cream text-lg font-semibold">
-              <QuestBoardTitle themeId={boardTheme}>Quest Board</QuestBoardTitle>
+              <QuestBoardTitle themeId={boardTheme}>Доска квестов</QuestBoardTitle>
             </h1>
             <button
               onClick={() => setShowThemePicker((v) => !v)}
               className="flex items-center justify-center w-8 h-8 rounded-lg border border-border hover:border-accent hover:bg-accent/10 text-cream transition-all text-base"
-              title="Change board theme"
+              title="Сменить тему доски"
             >
               {BOARD_THEMES.find((t) => t.id === boardTheme)?.icon || '\u2694\uFE0F'}
             </button>
@@ -254,7 +255,7 @@ export default function KidDashboard() {
         {totalCount > 0 && (
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-muted text-xs font-medium">Today's Progress</span>
+              <span className="text-muted text-xs font-medium">Прогресс за сегодня</span>
               <span className="text-cream text-xs font-bold">{completedCount}/{totalCount}</span>
             </div>
             <div className="xp-bar">
@@ -271,7 +272,7 @@ export default function KidDashboard() {
       {/* ── Board Theme Picker ── */}
       {showThemePicker && (
         <div className="game-panel p-4">
-          <h3 className="text-cream text-xs font-medium mb-3">Choose Board Theme</h3>
+          <h3 className="text-cream text-xs font-medium mb-3">Выбрать тему доски</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {BOARD_THEMES.map((t) => (
               <button
@@ -318,8 +319,8 @@ export default function KidDashboard() {
               <Sword size={36} className="text-muted" />
               <p className="text-muted text-sm">
                 {assignments.length === 0
-                  ? 'No quests for today. Take a break!'
-                  : 'All quests complete! Time to spin the wheel!'}
+                  ? 'Квестов на сегодня нет. Отдыхайте!'
+                  : 'Все квесты выполнены! Пора крутить колесо!'}
               </p>
             </motion.div>
           );
@@ -389,7 +390,7 @@ export default function KidDashboard() {
                         {chore.requires_photo && (
                           <span className="inline-flex items-center gap-1 text-muted text-xs">
                             <Camera size={10} />
-                            Photo
+                            Фото
                           </span>
                         )}
                       </div>
@@ -406,7 +407,7 @@ export default function KidDashboard() {
       {hasPet && (() => {
         const config = user?.avatar_config || {};
         const petLevel = myStats?.pet?.level || 1;
-        const petLevelName = myStats?.pet?.name || 'Hatchling';
+        const petLevelName = myStats?.pet?.name || 'Питомец';
         const petAccessory = config.pet_accessory;
         // Level-based scale (matches AvatarDisplay)
         const sc = 1 + (petLevel - 1) * 0.04;
@@ -419,10 +420,10 @@ export default function KidDashboard() {
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-cream text-sm font-semibold flex items-center gap-2">
               <Heart size={14} className="text-crimson" />
-              Pet Care
+              Уход за питомцем
             </h3>
             <span className="text-muted text-[11px]">
-              {interactionsRemaining} interaction{interactionsRemaining !== 1 ? 's' : ''} left today
+              Осталось взаимодействий: {interactionsRemaining}
             </span>
           </div>
 
@@ -505,7 +506,7 @@ export default function KidDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 className={`text-xs mb-3 text-center font-semibold ${
-                  petMessage.includes('Could not') || petMessage.includes('tired') ? 'text-crimson' : 'text-emerald'
+                  petMessage.includes('Не удалось') || petMessage.includes('tired') ? 'text-crimson' : 'text-emerald'
                 }`}
               >
                 {petMessage}
@@ -516,9 +517,9 @@ export default function KidDashboard() {
           {/* Action buttons */}
           <div className="flex gap-2">
             {[
-              { action: 'feed', icon: Heart, label: 'Feed', color: 'game-btn-red' },
-              { action: 'pet', icon: HandHeart, label: 'Pet', color: 'game-btn-blue' },
-              { action: 'play', icon: Gamepad2, label: 'Play', color: 'game-btn-purple' },
+              { action: 'feed', icon: Heart, label: 'Покормить', color: 'game-btn-red' },
+              { action: 'pet', icon: HandHeart, label: 'Погладить', color: 'game-btn-blue' },
+              { action: 'play', icon: Gamepad2, label: 'Играть', color: 'game-btn-purple' },
             ].map(({ action, icon: Icon, label, color }) => (
               <button
                 key={action}
@@ -546,8 +547,8 @@ export default function KidDashboard() {
         <div className="game-panel p-3 flex items-center gap-3">
           <ShieldOff size={16} className="text-accent flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-cream text-xs font-medium">Streak Freeze Available</p>
-            <p className="text-muted text-[10px]">Your streak will be saved once if you miss a day this month</p>
+            <p className="text-cream text-xs font-medium">Доступна заморозка серии</p>
+            <p className="text-muted text-[10px]">Ваша серия сохранится один раз, если вы пропустите день в этом месяце</p>
           </div>
         </div>
       )}

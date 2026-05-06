@@ -19,7 +19,7 @@ export default function Leaderboard() {
       const data = await api('/api/stats/leaderboard');
       setEntries(data.leaderboard || data || []);
     } catch (err) {
-      setError(err.message || 'Failed to load leaderboard');
+      setError(err.message || 'Не удалось загрузить таблицу лидеров');
     }
   }, []);
 
@@ -42,14 +42,14 @@ export default function Leaderboard() {
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-cream text-lg font-semibold mb-5">
-        Leaderboard
+        Таблица лидеров
       </h1>
 
       {!leaderboard_enabled && (
         <div className="game-panel p-8 text-center">
-          <p className="text-cream text-sm font-medium">Leaderboard Disabled</p>
+          <p className="text-cream text-sm font-medium">Таблица лидеров отключена</p>
           <p className="text-muted text-sm mt-1">
-            The leaderboard has been turned off in family settings.
+            Таблица лидеров отключена в семейных настройках.
           </p>
         </div>
       )}
@@ -69,7 +69,7 @@ export default function Leaderboard() {
       {leaderboard_enabled && !loading && !error && entries.length === 0 && (
         <div className="game-panel p-8 text-center">
           <p className="text-muted text-sm">
-            No XP earned this week yet.
+            За эту неделю пока не получено XP.
           </p>
         </div>
       )}
@@ -119,7 +119,7 @@ export default function Leaderboard() {
                   <div className="flex items-center gap-2 text-xs text-muted mt-0.5">
                     <span className="flex items-center gap-1">
                       <Swords size={11} className="text-accent" />
-                      {questsDone} quest{questsDone !== 1 ? 's' : ''}
+                      {questsDone} задан.
                     </span>
                     {streak > 0 && (
                       <span className="flex items-center gap-1">
@@ -129,7 +129,7 @@ export default function Leaderboard() {
                     )}
                     {isTop3 && (
                       <span className="text-muted/60">
-                        {totalXp} total
+                        {totalXp} всего
                       </span>
                     )}
                   </div>
@@ -141,7 +141,7 @@ export default function Leaderboard() {
                       style={{ width: `${pct}%` }}
                     />
                     <span className="absolute inset-0 flex items-center justify-center text-navy font-medium text-[10px] z-10">
-                      {xp} XP this week
+                      {xp} XP за неделю
                     </span>
                   </div>
                 </div>

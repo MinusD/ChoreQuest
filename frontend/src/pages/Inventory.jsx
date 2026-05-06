@@ -25,7 +25,7 @@ export default function Inventory() {
       const data = await api('/api/rewards/redemptions');
       setRedemptions(data);
     } catch (err) {
-      setError(err.message || 'Failed to load inventory');
+      setError(err.message || 'Не удалось загрузить инвентарь');
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function Inventory() {
       });
       await fetchInventory();
     } catch (err) {
-      setError(err.message || 'Could not mark as given');
+      setError(err.message || 'Не удалось отметить как выдано');
     } finally {
       setFulfillingId(null);
     }
@@ -69,7 +69,7 @@ export default function Inventory() {
   const groupByKid = (items) => {
     const map = {};
     for (const r of items) {
-      const name = r.user?.display_name || r.user?.username || `Kid #${r.user_id}`;
+      const name = r.user?.display_name || r.user?.username || `Ребёнок #${r.user_id}`;
       if (!map[name]) map[name] = [];
       map[name].push(r);
     }
@@ -81,7 +81,7 @@ export default function Inventory() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <h1 className="text-cream text-lg font-semibold">
-          {isKid ? 'My Inventory' : 'Reward Inventory'}
+          {isKid ? 'Мой инвентарь' : 'Инвентарь наград'}
         </h1>
       </div>
 
@@ -106,7 +106,7 @@ export default function Inventory() {
             <div className="text-center py-16">
               <Package size={48} className="text-muted mx-auto mb-4" />
               <p className="text-cream text-sm font-medium">
-                {isKid ? 'No loot yet!' : 'No claimed rewards'}
+                {isKid ? 'Пока пусто!' : 'Нет полученных наград'}
               </p>
             </div>
           )}
@@ -117,7 +117,7 @@ export default function Inventory() {
               {activeLoot.length > 0 && (
                 <div>
                   <p className="text-muted text-[11px] font-medium mb-3">
-                    Ready to collect
+                    Готово к получению
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {activeLoot.map((r) => (
@@ -130,7 +130,7 @@ export default function Inventory() {
               {pendingLoot.length > 0 && (
                 <div>
                   <p className="text-muted text-[11px] font-medium mb-3">
-                    Awaiting approval
+                    Ожидает подтверждения
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {pendingLoot.map((r) => (
@@ -148,7 +148,7 @@ export default function Inventory() {
               {activeLoot.length > 0 && (
                 <div>
                   <p className="text-muted text-[11px] font-medium mb-3">
-                    Waiting to be given out
+                    Ожидают выдачи
                   </p>
                   {groupByKid(activeLoot).map(([kidName, items]) => (
                     <div key={kidName} className="mb-5">
@@ -175,7 +175,7 @@ export default function Inventory() {
               {pendingLoot.length > 0 && (
                 <div>
                   <p className="text-muted text-[11px] font-medium mb-3">
-                    Pending approval
+                    Ожидают подтверждения
                   </p>
                   {groupByKid(pendingLoot).map(([kidName, items]) => (
                     <div key={kidName} className="mb-5">
@@ -214,16 +214,16 @@ function LootCard({ redemption, status, showFulfill, onFulfill, fulfilling }) {
       <div className="text-2xl flex-shrink-0">{icon}</div>
       <div className="min-w-0 flex-1">
         <p className="text-cream text-sm font-medium truncate">
-          {reward?.title || 'Reward'}
+          {reward?.title || 'Награда'}
         </p>
         <div className="flex items-center gap-2 mt-1">
           {status === 'approved' ? (
             <span className="flex items-center gap-1 text-emerald text-xs">
-              <Gift size={12} /> Approved
+              <Gift size={12} /> Подтверждено
             </span>
           ) : (
             <span className="flex items-center gap-1 text-muted text-xs">
-              <Clock size={12} /> Pending
+              <Clock size={12} /> В ожидании
             </span>
           )}
           <span className="text-muted text-xs">
@@ -232,7 +232,7 @@ function LootCard({ redemption, status, showFulfill, onFulfill, fulfilling }) {
         </div>
         {redemption.created_at && (
           <p className="text-muted/60 text-[10px] mt-1">
-            Claimed {new Date(redemption.created_at).toLocaleDateString()}
+            Получено {new Date(redemption.created_at).toLocaleDateString()}
           </p>
         )}
       </div>
@@ -242,10 +242,10 @@ function LootCard({ redemption, status, showFulfill, onFulfill, fulfilling }) {
           onClick={onFulfill}
           disabled={fulfilling}
           className="game-btn game-btn-blue flex items-center gap-1 text-xs !py-1.5 !px-3 flex-shrink-0"
-          title="Mark as given out"
+          title="Отметить как выдано"
         >
           <CheckCheck size={14} />
-          {fulfilling ? '...' : 'Given'}
+          {fulfilling ? '...' : 'Выдано'}
         </button>
       )}
     </div>

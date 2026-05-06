@@ -6,9 +6,9 @@
 export const BOARD_THEMES = [
   {
     id: 'default',
-    label: 'Classic',
+    label: 'Классика',
     icon: '\u2694\uFE0F',
-    description: 'The standard quest board',
+    description: 'Стандартная доска квестов',
     headerGradient: null,
     pageGradient: null,
     cardAccent: null,
@@ -16,9 +16,9 @@ export const BOARD_THEMES = [
   },
   {
     id: 'halloween',
-    label: 'Haunted Dungeon',
+    label: 'Проклятое подземелье',
     icon: '\uD83C\uDF83',
-    description: 'Spooky vibes for brave heroes',
+    description: 'Жуткая атмосфера для храбрых героев',
     headerGradient: 'linear-gradient(135deg, rgba(88,28,135,0.25) 0%, rgba(30,10,60,0.35) 50%, rgba(139,69,19,0.15) 100%)',
     pageGradient: 'radial-gradient(ellipse at top, rgba(88,28,135,0.12) 0%, transparent 70%)',
     cardAccent: '#9333ea',
@@ -26,9 +26,9 @@ export const BOARD_THEMES = [
   },
   {
     id: 'christmas',
-    label: 'Winter Workshop',
+    label: 'Зимняя мастерская',
     icon: '\uD83C\uDF84',
-    description: "Santa's quest factory",
+    description: 'Фабрика заданий Санты',
     headerGradient: 'linear-gradient(135deg, rgba(22,101,52,0.25) 0%, rgba(153,27,27,0.20) 50%, rgba(22,78,99,0.15) 100%)',
     pageGradient: 'radial-gradient(ellipse at top, rgba(22,101,52,0.10) 0%, transparent 70%)',
     cardAccent: '#ef4444',
@@ -36,9 +36,9 @@ export const BOARD_THEMES = [
   },
   {
     id: 'space',
-    label: 'Space Station',
+    label: 'Космическая станция',
     icon: '\uD83D\uDE80',
-    description: 'Missions from orbit',
+    description: 'Миссии с орбиты',
     headerGradient: 'linear-gradient(135deg, rgba(30,58,138,0.30) 0%, rgba(88,28,135,0.20) 50%, rgba(15,23,42,0.35) 100%)',
     pageGradient: 'radial-gradient(ellipse at top, rgba(30,58,138,0.12) 0%, transparent 70%)',
     cardAccent: '#14b8a6',
@@ -46,9 +46,9 @@ export const BOARD_THEMES = [
   },
   {
     id: 'underwater',
-    label: 'Ocean Kingdom',
+    label: 'Океанское королевство',
     icon: '\uD83C\uDF0A',
-    description: 'Deep sea adventures',
+    description: 'Глубоководные приключения',
     headerGradient: 'linear-gradient(135deg, rgba(8,145,178,0.25) 0%, rgba(6,78,59,0.20) 50%, rgba(21,94,117,0.25) 100%)',
     pageGradient: 'radial-gradient(ellipse at top, rgba(8,145,178,0.12) 0%, transparent 70%)',
     cardAccent: '#06b6d4',
@@ -56,9 +56,9 @@ export const BOARD_THEMES = [
   },
   {
     id: 'enchanted',
-    label: 'Enchanted Garden',
+    label: 'Зачарованный сад',
     icon: '\uD83C\uDF38',
-    description: 'Magical forest quests',
+    description: 'Магические лесные задания',
     headerGradient: 'linear-gradient(135deg, rgba(219,39,119,0.20) 0%, rgba(126,34,206,0.20) 50%, rgba(5,150,105,0.15) 100%)',
     pageGradient: 'radial-gradient(ellipse at top, rgba(219,39,119,0.10) 0%, transparent 70%)',
     cardAccent: '#ec4899',
@@ -142,13 +142,13 @@ export function QuestBoardDecorations({ themeId }) {
 
 export function QuestBoardTitle({ themeId, children }) {
   const titles = {
-    default: 'Quest Board',
-    halloween: 'Dungeon Quests',
-    christmas: 'Workshop Tasks',
-    space: 'Mission Control',
-    underwater: 'Ocean Missions',
-    enchanted: 'Garden Quests',
+    default: 'Доска заданий',
+    halloween: 'Подземельные задания',
+    christmas: 'Задания мастерской',
+    space: 'Центр миссий',
+    underwater: 'Океанские миссии',
+    enchanted: 'Садовые задания',
   };
 
-  return <>{titles[themeId] || children || 'Quest Board'}</>;
+  return <>{titles[themeId] || children || 'Доска заданий'}</>;
 }

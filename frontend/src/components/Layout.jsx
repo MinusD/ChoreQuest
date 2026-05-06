@@ -24,24 +24,24 @@ import {
 import AvatarDisplay from './AvatarDisplay';
 
 const ALL_NAV_ITEMS = [
-  { label: 'Home', icon: Home, path: '/' },
-  { label: 'Quests', icon: Swords, path: '/chores' },
-  { label: 'Party', icon: Users, path: '/party', mobileMore: true },
-  { label: 'Leaderboard', icon: Trophy, path: '/leaderboard', settingKey: 'leaderboard_enabled', mobileMore: true },
-  { label: 'Rewards', icon: Gift, path: '/rewards' },
-  { label: 'Calendar', icon: CalendarDays, path: '/calendar', mobileMore: true },
-  { label: 'Events', icon: Sparkles, path: '/events', parentOnly: true, mobileMore: true },
+  { label: 'Главная', icon: Home, path: '/' },
+  { label: 'Квесты', icon: Swords, path: '/chores' },
+  { label: 'Отряд', icon: Users, path: '/party', mobileMore: true },
+  { label: 'Рейтинг', icon: Trophy, path: '/leaderboard', settingKey: 'leaderboard_enabled', mobileMore: true },
+  { label: 'Награды', icon: Gift, path: '/rewards' },
+  { label: 'Календарь', icon: CalendarDays, path: '/calendar', mobileMore: true },
+  { label: 'События', icon: Sparkles, path: '/events', parentOnly: true, mobileMore: true },
 ];
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return 'только что';
+  if (mins < 60) return `${mins} мин. назад`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+  if (hrs < 24) return `${hrs} ч. назад`;
+  return `${Math.floor(hrs / 24)} д. назад`;
 }
 
 export default function Layout({ children }) {
@@ -171,7 +171,7 @@ export default function Layout({ children }) {
               <button
                 onClick={() => navigate(-1)}
                 className="p-1.5 rounded-md hover:bg-surface-raised transition-colors text-muted hover:text-cream"
-                aria-label="Go back"
+                aria-label="Назад"
               >
                 <ArrowLeft size={18} />
               </button>
@@ -198,7 +198,7 @@ export default function Layout({ children }) {
                   });
                 }}
                 className="relative p-2 rounded-md hover:bg-surface-raised transition-colors"
-                aria-label="Notifications"
+                aria-label="Уведомления"
               >
                 <Bell size={18} className="text-muted hover:text-cream transition-colors" />
                 {unreadCount > 0 && (
@@ -212,13 +212,13 @@ export default function Layout({ children }) {
               {showNotifs && (
                 <div className="fixed right-2 left-2 sm:left-auto sm:absolute sm:right-0 top-12 sm:top-full sm:mt-1 sm:w-80 max-h-96 bg-surface border border-border rounded-md overflow-hidden z-50">
                   <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
-                    <span className="text-cream text-sm font-semibold">Notifications</span>
+                    <span className="text-cream text-sm font-semibold">Уведомления</span>
                     <div className="flex items-center gap-1">
                       {unreadCount > 0 && (
                         <button
                           onClick={markAllRead}
                           className="text-muted hover:text-cream text-xs flex items-center justify-center gap-1 transition-colors min-w-[44px] min-h-[44px]"
-                          title="Mark all read"
+                          title="Отметить все прочитанными"
                         >
                           <CheckCheck size={18} />
                         </button>
@@ -235,7 +235,7 @@ export default function Layout({ children }) {
                   <div className="overflow-y-auto max-h-80">
                     {notifications.length === 0 ? (
                       <div className="p-6 text-center text-muted text-sm">
-                        No notifications yet.
+                        Пока нет уведомлений.
                       </div>
                     ) : (
                       notifications.map((n) => {
@@ -270,7 +270,7 @@ export default function Layout({ children }) {
                                       }}
                                       className="game-btn game-btn-blue !py-1.5 !px-3 !text-[10px]"
                                     >
-                                      Accept
+                                      Принять
                                     </button>
                                     <button
                                       onClick={(e) => {
@@ -281,7 +281,7 @@ export default function Layout({ children }) {
                                       }}
                                       className="game-btn game-btn-red !py-1.5 !px-3 !text-[10px]"
                                     >
-                                      Deny
+                                      Отклонить
                                     </button>
                                   </div>
                                 )}
@@ -304,7 +304,7 @@ export default function Layout({ children }) {
               <button
                 onClick={() => navigate('/profile')}
                 className="md:hidden"
-                aria-label="Profile"
+                aria-label="Профиль"
               >
                 <AvatarDisplay
                   config={user.avatar_config}
@@ -393,7 +393,7 @@ export default function Layout({ children }) {
             >
               <MoreHorizontal size={18} />
               <span className="text-[10px] font-medium leading-none truncate">
-                More
+                Ещё
               </span>
             </button>
           )}

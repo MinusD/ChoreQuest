@@ -31,10 +31,10 @@ const emptyForm = {
 };
 
 const TABS = [
-  { key: 'shop', label: 'Shop', icon: ShoppingBag },
-  { key: 'avatar', label: 'Avatar', icon: Palette },
-  { key: 'inventory', label: 'Inventory', icon: Package },
-  { key: 'wishlist', label: 'Wishlist', icon: Star },
+  { key: 'shop', label: 'Магазин', icon: ShoppingBag },
+  { key: 'avatar', label: 'Аватар', icon: Palette },
+  { key: 'inventory', label: 'Инвентарь', icon: Package },
+  { key: 'wishlist', label: 'Список желаний', icon: Star },
 ];
 
 export default function Rewards() {
@@ -72,7 +72,7 @@ export default function Rewards() {
       const data = await api('/api/rewards');
       setRewards(Array.isArray(data) ? data : data.rewards || data.items || []);
     } catch (err) {
-      setError(err.message || 'Failed to load rewards.');
+      setError(err.message || 'Не удалось загрузить награды.');
     }
   }, []);
 
@@ -144,11 +144,11 @@ export default function Rewards() {
 
   const handleSubmit = async () => {
     if (!form.title.trim()) {
-      setFormError('Name is required.');
+      setFormError('Введите название.');
       return;
     }
     if (Number(form.point_cost) < 1) {
-      setFormError('Cost must be at least 1 XP.');
+      setFormError('Стоимость должна быть не менее 1 ОП.');
       return;
     }
 
@@ -176,7 +176,7 @@ export default function Rewards() {
       closeModal();
       await fetchRewards();
     } catch (err) {
-      setFormError(err.message || 'Could not save the reward.');
+      setFormError(err.message || 'Не удалось сохранить награду.');
     } finally {
       setSubmitting(false);
     }
@@ -190,7 +190,7 @@ export default function Rewards() {
       setDeleteTarget(null);
       await fetchRewards();
     } catch (err) {
-      setError(err.message || 'Failed to remove the reward.');
+      setError(err.message || 'Не удалось удалить награду.');
     } finally {
       setDeleting(false);
     }
@@ -203,10 +203,10 @@ export default function Rewards() {
       await api(`/api/rewards/${reward.id}/redeem`, { method: 'POST' });
       const cost = reward.point_cost ?? reward.cost ?? 0;
       updateUser({ points_balance: (user?.points_balance ?? 0) - cost });
-      setRedeemMessage(`Claimed "${reward.title}". Check your inventory.`);
+      setRedeemMessage(`Получено «${reward.title}». Проверьте инвентарь.`);
       await fetchRewards();
     } catch (err) {
-      setRedeemMessage(err.message || 'Redemption failed.');
+      setRedeemMessage(err.message || 'Ошибка получения.');
     } finally {
       setRedeemingId(null);
     }
@@ -234,7 +234,7 @@ export default function Rewards() {
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <h1 className="text-cream text-lg font-semibold">
-          Rewards Shop
+          Магазин наград
         </h1>
         {isParent && (
           <button
@@ -242,7 +242,7 @@ export default function Rewards() {
             className="game-btn game-btn-blue flex items-center gap-1.5"
           >
             <Plus size={14} />
-            Add Reward
+            Добавить награду
           </button>
         )}
       </div>
@@ -252,8 +252,8 @@ export default function Rewards() {
           <div className="flex items-center gap-3">
             <Coins size={20} className="text-gold" />
             <div>
-              <p className="text-muted text-xs">Your balance</p>
-              <p className="text-gold text-base font-semibold">{userXp.toLocaleString()} XP</p>
+              <p className="text-muted text-xs">Ваш баланс</p>
+              <p className="text-gold text-base font-semibold">{userXp.toLocaleString()} ОП</p>
             </div>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function Rewards() {
                   : 'text-muted border-border hover:text-cream'
               }`}
             >
-              All
+              Все
             </button>
             {categories.map(cat => (
               <button
@@ -314,7 +314,7 @@ export default function Rewards() {
                 onClick={() => setTab('inventory')}
                 className="underline font-medium hover:opacity-80 transition-opacity"
               >
-                View Inventory
+                Открыть инвентарь
               </button>
             )}
         </div>
@@ -325,24 +325,24 @@ export default function Rewards() {
         return filtered;
       })().length === 0 && rewards.length > 0 ? (
         <div className="game-panel p-8 text-center">
-          <p className="text-muted text-sm">No rewards in this category.</p>
+          <p className="text-muted text-sm">В этой категории нет наград.</p>
           <button
             onClick={() => setCategoryFilter('all')}
             className="text-accent text-xs mt-2 hover:underline"
           >
-            Show all
+            Показать все
           </button>
         </div>
       ) : rewards.length === 0 ? (
         <div className="game-panel p-8 text-center">
-          <p className="text-muted text-sm">No rewards available yet.</p>
+          <p className="text-muted text-sm">Наград пока нет.</p>
           {isParent && (
             <button
               onClick={openCreateModal}
               className="game-btn game-btn-blue mt-3 inline-flex items-center gap-1.5"
             >
               <Plus size={14} />
-              Add first reward
+              Добавить первую награду
             </button>
           )}
         </div>
@@ -390,9 +390,9 @@ export default function Rewards() {
                   <div className="flex items-center gap-1.5">
                     <Package size={12} className={outOfStock ? 'text-crimson' : 'text-muted'} />
                     {outOfStock ? (
-                      <span className="text-crimson text-xs font-medium">Sold Out</span>
+                      <span className="text-crimson text-xs font-medium">Распродано</span>
                     ) : (
-                      <span className="text-muted text-xs">{reward.stock} left</span>
+                      <span className="text-muted text-xs">Осталось: {reward.stock}</span>
                     )}
                   </div>
                 )}
@@ -408,12 +408,12 @@ export default function Rewards() {
                     >
                       <Coins size={12} />
                       {redeemingId === reward.id
-                        ? 'Claiming...'
+                        ? 'Получение...'
                         : !affordable
-                        ? 'Not Enough XP'
+                        ? 'Недостаточно XP'
                         : outOfStock
-                        ? 'Sold Out'
-                        : 'Redeem'}
+                        ? 'Распродано'
+                        : 'Получить'}
                     </button>
                   )}
                   {isParent && (
@@ -421,14 +421,14 @@ export default function Rewards() {
                       <button
                         onClick={() => openEditModal(reward)}
                         className="p-1.5 rounded-md hover:bg-surface-raised transition-colors text-muted hover:text-accent"
-                        aria-label="Edit reward"
+                        aria-label="Редактировать награду"
                       >
                         <Pencil size={14} />
                       </button>
                       <button
                         onClick={() => setDeleteTarget(reward)}
                         className="p-1.5 rounded-md hover:bg-surface-raised transition-colors text-muted hover:text-crimson"
-                        aria-label="Delete reward"
+                        aria-label="Удалить награду"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -444,11 +444,11 @@ export default function Rewards() {
       <Modal
         isOpen={showModal}
         onClose={closeModal}
-        title={editingReward ? 'Edit Reward' : 'New Reward'}
+        title={editingReward ? 'Редактировать награду' : 'Новая награда'}
         actions={[
-          { label: 'Cancel', onClick: closeModal, className: 'game-btn game-btn-red' },
+          { label: 'Отмена', onClick: closeModal, className: 'game-btn game-btn-red' },
           {
-            label: submitting ? 'Saving...' : editingReward ? 'Update' : 'Add Reward',
+            label: submitting ? 'Сохранение...' : editingReward ? 'Обновить' : 'Добавить награду',
             onClick: handleSubmit,
             className: 'game-btn game-btn-gold',
             disabled: submitting,
@@ -460,29 +460,29 @@ export default function Rewards() {
             <div className="p-2 rounded-md border border-crimson/40 bg-crimson/10 text-crimson text-sm">{formError}</div>
           )}
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Name</label>
-            <input type="text" value={form.title} onChange={(e) => updateForm('title', e.target.value)} placeholder="Extra Screen Time" className="field-input" />
+            <label className="block text-cream text-sm font-medium mb-1">Название</label>
+            <input type="text" value={form.title} onChange={(e) => updateForm('title', e.target.value)} placeholder="Дополнительное экранное время" className="field-input" />
           </div>
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Description</label>
-            <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} placeholder="What does this reward grant?" rows={3} className="field-input resize-none" />
+            <label className="block text-cream text-sm font-medium mb-1">Описание</label>
+            <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} placeholder="Что даёт эта награда?" rows={3} className="field-input resize-none" />
           </div>
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Cost (XP)</label>
+            <label className="block text-cream text-sm font-medium mb-1">Стоимость (XP)</label>
             <input type="number" min={1} value={form.point_cost} onChange={(e) => updateForm('point_cost', e.target.value)} className="field-input" />
           </div>
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Icon (Emoji)</label>
-            <input type="text" value={form.icon} onChange={(e) => updateForm('icon', e.target.value)} placeholder="e.g. trophy, star, gift" className="field-input" />
+            <label className="block text-cream text-sm font-medium mb-1">Иконка (эмодзи)</label>
+            <input type="text" value={form.icon} onChange={(e) => updateForm('icon', e.target.value)} placeholder="например, 🏆, ⭐, 🎁" className="field-input" />
           </div>
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Category (Optional)</label>
-            <input type="text" value={form.category} onChange={(e) => updateForm('category', e.target.value)} placeholder="e.g. Treats, Experiences" className="field-input" />
+            <label className="block text-cream text-sm font-medium mb-1">Категория (необязательно)</label>
+            <input type="text" value={form.category} onChange={(e) => updateForm('category', e.target.value)} placeholder="например, Лакомства, Впечатления" className="field-input" />
           </div>
           <div>
-            <label className="block text-cream text-sm font-medium mb-1">Stock (Optional)</label>
-            <input type="number" min={0} value={form.stock} onChange={(e) => updateForm('stock', e.target.value)} placeholder="Leave empty for unlimited" className="field-input" />
-            <p className="text-muted text-xs mt-1">Leave empty for unlimited supply.</p>
+            <label className="block text-cream text-sm font-medium mb-1">Запас (необязательно)</label>
+            <input type="number" min={0} value={form.stock} onChange={(e) => updateForm('stock', e.target.value)} placeholder="Оставьте пустым для безлимита" className="field-input" />
+            <p className="text-muted text-xs mt-1">Оставьте пустым для неограниченного запаса.</p>
           </div>
         </div>
       </Modal>
@@ -490,14 +490,14 @@ export default function Rewards() {
       <Modal
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        title="Remove Reward"
+        title="Удалить награду"
         actions={[
-          { label: 'Cancel', onClick: () => setDeleteTarget(null), className: 'game-btn game-btn-blue' },
-          { label: deleting ? 'Removing...' : 'Remove', onClick: handleDelete, className: 'game-btn game-btn-red', disabled: deleting },
+          { label: 'Отмена', onClick: () => setDeleteTarget(null), className: 'game-btn game-btn-blue' },
+          { label: deleting ? 'Удаление...' : 'Удалить', onClick: handleDelete, className: 'game-btn game-btn-red', disabled: deleting },
         ]}
       >
         <p className="text-muted">
-          Remove <span className="text-gold font-medium">"{deleteTarget?.title}"</span> from the shop?
+          Удалить <span className="text-gold font-medium">"{deleteTarget?.title}"</span> из магазина?
         </p>
       </Modal>
     </div>

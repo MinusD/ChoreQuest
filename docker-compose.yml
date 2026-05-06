@@ -6,6 +6,7 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - TZ=Europe/London
+      - TZ=Europe/Moscow
     volumes:
       - ./data:/app/data
     restart: unless-stopped

@@ -20,23 +20,23 @@ export default function Register() {
     setError('');
 
     if (!username.trim()) {
-      setError('Username is required');
+      setError('Введите имя пользователя');
       return;
     }
     if (!password) {
-      setError('Password is required');
+      setError('Введите пароль');
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Пароль должен содержать не менее 6 символов');
       return;
     }
     if (!displayName.trim()) {
-      setError('Display name is required');
+      setError('Введите отображаемое имя');
       return;
     }
     if (displayName.trim().length > 10) {
-      setError('Display name must be 10 characters or less');
+      setError('Отображаемое имя не более 10 символов');
       return;
     }
 
@@ -51,7 +51,7 @@ export default function Register() {
       );
       navigate('/');
     } catch (err) {
-      setError(err?.message || 'Registration failed. Please try again.');
+      setError(err?.message || 'Ошибка регистрации. Попробуйте снова.');
     } finally {
       setSubmitting(false);
     }
@@ -69,7 +69,7 @@ export default function Register() {
             <Swords size={16} className="text-navy" />
           </div>
           <h1 className="text-cream text-lg font-semibold">
-            Create account
+            Создать аккаунт
           </h1>
         </div>
 
@@ -83,13 +83,13 @@ export default function Register() {
         {/* Username */}
         <div className="mb-3">
           <label className="block text-cream text-sm font-medium mb-1">
-            Username
+            Имя пользователя
           </label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Choose a username"
+            placeholder="Выберите имя пользователя"
             autoComplete="username"
             className="field-input"
           />
@@ -98,13 +98,13 @@ export default function Register() {
         {/* Password */}
         <div className="mb-3">
           <label className="block text-cream text-sm font-medium mb-1">
-            Password
+            Пароль
           </label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Min 6 characters"
+            placeholder="Минимум 6 символов"
             autoComplete="new-password"
             className="field-input"
           />
@@ -113,14 +113,14 @@ export default function Register() {
         {/* Display Name */}
         <div className="mb-3">
           <label className="block text-cream text-sm font-medium mb-1">
-            Display Name
+            Отображаемое имя
           </label>
           <input
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             maxLength={10}
-            placeholder="What others will see"
+            placeholder="Как вас будут видеть другие"
             autoComplete="off"
             className="field-input"
           />
@@ -129,7 +129,7 @@ export default function Register() {
         {/* Role */}
         <div className="mb-3">
           <label className="block text-cream text-sm font-medium mb-1">
-            Role
+            Роль
           </label>
           <div className="relative">
             <select
@@ -137,8 +137,8 @@ export default function Register() {
               onChange={(e) => setRole(e.target.value)}
               className="field-input appearance-none cursor-pointer pr-10"
             >
-              <option value="kid">Adventurer (Kid)</option>
-              <option value="parent">Leader (Parent)</option>
+              <option value="kid">Искатель приключений (Ребёнок)</option>
+              <option value="parent">Предводитель (Родитель)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted">
               <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
@@ -151,18 +151,18 @@ export default function Register() {
         {/* Invite Code */}
         <div className="mb-5">
           <label className="block text-cream text-sm font-medium mb-1">
-            Invite Code
+            Код приглашения
           </label>
           <input
             type="text"
             value={inviteCode}
             onChange={(e) => setInviteCode(e.target.value)}
-            placeholder="Enter invite code"
+            placeholder="Введите код приглашения"
             autoComplete="off"
             className="field-input"
           />
           <p className="text-muted text-xs mt-1">
-            Required unless you're the first user
+            Обязателен, если вы не первый пользователь
           </p>
         </div>
 
@@ -172,14 +172,14 @@ export default function Register() {
           disabled={submitting}
           className={`game-btn game-btn-blue w-full text-sm ${submitting ? 'opacity-60 cursor-wait' : ''}`}
         >
-          {submitting ? 'Creating account...' : 'Create account'}
+          {submitting ? 'Создание аккаунта...' : 'Создать аккаунт'}
         </button>
 
         {/* Login link */}
         <p className="text-center mt-5 text-muted text-sm">
-          Already have an account?{' '}
+          Уже есть аккаунт?{' '}
           <Link to="/login" className="text-accent hover:text-accent-light font-medium transition-colors">
-            Sign in
+            Войти
           </Link>
         </p>
       </form>
