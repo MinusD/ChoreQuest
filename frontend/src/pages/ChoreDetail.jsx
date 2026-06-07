@@ -10,8 +10,6 @@ import {
   RefreshCw,
   Camera,
   CheckCircle2,
-  XCircle,
-  SkipForward,
   Calendar,
   Clock,
   Shield,
@@ -77,7 +75,7 @@ function StatusBadge({ status }) {
         styles[status] || styles.pending
       }`}
     >
-      {({'pending':'ожидает','completed':'выполнено','verified':'подтверждено','skipped':'пропущено','missed':'пропущен'})[status] || 'ожидает'}
+      {({'pending':'в процессе','completed':'выполнено','verified':'выполнено','skipped':'пропущено','missed':'пропущен'})[status] || 'в процессе'}
     </span>
   );
 }
@@ -156,57 +154,6 @@ export default function ChoreDetail() {
       await fetchChore();
     } catch (err) {
       setActionMessage(err.message || 'Не удалось завершить квест.');
-    } finally {
-      setActionLoading('');
-    }
-  };
-
-  const handleVerify = async (assignmentId) => {
-    setActionLoading('verify');
-    setActionMessage('');
-    try {
-      const path = assignmentId
-        ? `/api/chores/assignments/${assignmentId}/verify`
-        : `/api/chores/${id}/verify`;
-      await api(path, { method: 'POST' });
-      setActionMessage('Задание подтверждено! Герой получил награду.');
-      await fetchChore();
-    } catch (err) {
-      setActionMessage(err.message || 'Verification failed.');
-    } finally {
-      setActionLoading('');
-    }
-  };
-
-  const handleUncomplete = async (assignmentId) => {
-    setActionLoading('uncomplete');
-    setActionMessage('');
-    try {
-      const path = assignmentId
-        ? `/api/chores/assignments/${assignmentId}/uncomplete`
-        : `/api/chores/${id}/uncomplete`;
-      await api(path, { method: 'POST' });
-      setActionMessage('Задание отмечено как невыполненное.');
-      await fetchChore();
-    } catch (err) {
-      setActionMessage(err.message || 'Не удалось отменить выполнение.');
-    } finally {
-      setActionLoading('');
-    }
-  };
-
-  const handleSkip = async (assignmentId) => {
-    setActionLoading('skip');
-    setActionMessage('');
-    try {
-      const path = assignmentId
-        ? `/api/chores/assignments/${assignmentId}/skip`
-        : `/api/chores/${id}/skip`;
-      await api(path, { method: 'POST' });
-      setActionMessage('Задание пропущено на сегодня.');
-      await fetchChore();
-    } catch (err) {
-      setActionMessage(err.message || 'Не удалось пропустить задание.');
     } finally {
       setActionLoading('');
     }
@@ -452,44 +399,6 @@ export default function ChoreDetail() {
         </div>
       )}
 
-      {/* Actions for parents */}
-      {isParent && (
-        <div className="game-panel p-5">
-          <p className="text-cream text-sm font-semibold mb-3">Действия</p>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => handleVerify(todayAssignment?.id)}
-              disabled={!!actionLoading}
-              className={`game-btn game-btn-blue flex items-center gap-2 ${
-                actionLoading === 'verify' ? 'opacity-60 cursor-wait' : ''
-              }`}
-            >
-              <CheckCircle2 size={14} />
-              {actionLoading === 'verify' ? 'Подтверждение...' : 'Подтвердить'}
-            </button>
-            <button
-              onClick={() => handleUncomplete(todayAssignment?.id)}
-              disabled={!!actionLoading}
-              className={`game-btn game-btn-blue flex items-center gap-2 ${
-                actionLoading === 'uncomplete' ? 'opacity-60 cursor-wait' : ''
-              }`}
-            >
-              <XCircle size={14} />
-              {actionLoading === 'uncomplete' ? 'Отмена...' : 'Отменить выполнение'}
-            </button>
-            <button
-              onClick={() => handleSkip(todayAssignment?.id)}
-              disabled={!!actionLoading}
-              className={`game-btn game-btn-red flex items-center gap-2 ${
-                actionLoading === 'skip' ? 'opacity-60 cursor-wait' : ''
-              }`}
-            >
-              <SkipForward size={14} />
-              {actionLoading === 'skip' ? 'Пропуск...' : 'Пропустить сегодня'}
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Assignment Rules Panel (parent only) */}
       {isParent && assignmentRules.length > 0 && (

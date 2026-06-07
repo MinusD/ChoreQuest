@@ -27,6 +27,7 @@ class Recurrence(str, enum.Enum):
     weekly = "weekly"
     fortnightly = "fortnightly"
     custom = "custom"
+    unlimited = "unlimited"
 
 
 class AssignmentStatus(str, enum.Enum):
@@ -184,6 +185,7 @@ class ChoreAssignment(Base):
     verified_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     photo_proof_path: Mapped[str | None] = mapped_column(String, nullable=True)
     feedback: Mapped[str | None] = mapped_column(Text, nullable=True)
+    completion_count: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

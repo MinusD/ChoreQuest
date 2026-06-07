@@ -40,4 +40,6 @@ def should_create_on_day(
         return weeks_diff % 2 == 0
     if recurrence == Recurrence.custom:
         return bool(custom_days and target_day.weekday() in custom_days)
+    if recurrence == Recurrence.unlimited:
+        return True
     return False

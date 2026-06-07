@@ -25,6 +25,7 @@ import {
   Users,
   ScrollText,
   Zap,
+  Infinity,
 } from 'lucide-react';
 
 const DIFFICULTY_OPTIONS = [
@@ -66,10 +67,18 @@ function CategoryBadge({ category }) {
 
 function RecurrenceIndicator({ recurrence, customDays }) {
   if (!recurrence || recurrence === 'once') return null;
+  if (recurrence === 'unlimited') {
+    return (
+      <div className="flex items-center gap-1 text-gold text-xs">
+        <Infinity size={11} />
+        <span>Вечный</span>
+      </div>
+    );
+  }
   return (
     <div className="flex items-center gap-1 text-muted text-xs">
       <RefreshCw size={11} />
-      <span className="capitalize">{recurrence}</span>
+      <span>{recurrence === 'daily' ? 'Ежедневно' : recurrence}</span>
       {recurrence === 'custom' && customDays?.length > 0 && (
         <span className="text-muted">
           ({customDays.map((d) => DAY_NAMES[d] || d).join(', ')})
@@ -133,17 +142,17 @@ export default function Chores() {
   }, []);
 
   const fetchAssignments = useCallback(async () => {
-    if (!isKid) return;
     try {
       const monday = getMondayOfThisWeek();
       const today = todayISO();
       const calendarRes = await api(`/api/calendar?week_start=${monday}`);
       const dayAssignments = (calendarRes.days && calendarRes.days[today]) || [];
-      setTodayAssignments(dayAssignments);
+      // filter to current user's own assignments
+      setTodayAssignments(dayAssignments.filter((a) => a.user_id === user?.id));
     } catch {
       // Non-critical
     }
-  }, [isKid]);
+  }, [user?.id]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -207,10 +216,12 @@ export default function Chores() {
   };
 
   const assignmentStatusMap = {};
-  if (isKid) {
-    for (const a of todayAssignments) {
-      const cid = a.chore_id || a.chore?.id;
-      if (cid) assignmentStatusMap[cid] = a.status;
+  const assignmentCountMap = {};
+  for (const a of todayAssignments) {
+    const cid = a.chore_id || a.chore?.id;
+    if (cid) {
+      assignmentStatusMap[cid] = a.status;
+      assignmentCountMap[cid] = a.completion_count || 0;
     }
   }
 
@@ -231,9 +242,9 @@ export default function Chores() {
     return true;
   });
 
-  const completedCount = isKid
-    ? Object.values(assignmentStatusMap).filter((s) => s === 'completed' || s === 'verified').length
-    : 0;
+  const completedCount = Object.values(assignmentStatusMap).filter(
+    (s) => s === 'completed' || s === 'verified'
+  ).length;
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -261,11 +272,9 @@ export default function Chores() {
     <div className="max-w-5xl mx-auto space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h1 className="text-cream text-lg font-semibold">
-          {isParent ? 'Управление квестами' : 'Мои квесты'}
-        </h1>
+        <h1 className="text-cream text-lg font-semibold">Квесты</h1>
         <div className="flex items-center gap-2">
-          {isKid && completedCount > 0 && (
+          {completedCount > 0 && (
             <button
               onClick={() => setShowCompleted((v) => !v)}
               className="flex items-center gap-1.5 text-muted hover:text-cream text-sm transition-colors"
@@ -274,15 +283,13 @@ export default function Chores() {
               {showCompleted ? `Скрыть выполненные (${completedCount})` : `Показать выполненные (${completedCount})`}
             </button>
           )}
-          {isParent && (
-            <button
-              onClick={() => { setEditingChore(null); setShowCreateModal(true); }}
-              className="game-btn game-btn-blue flex items-center gap-1.5"
-            >
-              <Plus size={14} />
-              Создать квест
-            </button>
-          )}
+          <button
+            onClick={() => { setEditingChore(null); setShowCreateModal(true); }}
+            className="game-btn game-btn-blue flex items-center gap-1.5"
+          >
+            <Plus size={14} />
+            Создать квест
+          </button>
         </div>
       </div>
 
@@ -363,7 +370,7 @@ export default function Chores() {
               ? 'Нет активных квестов. Назначьте из библиотеки.'
               : 'Квесты не найдены.'}
           </p>
-          {isParent && chores.length === 0 && (
+          {chores.length === 0 && (
             <button
               onClick={() => { setEditingChore(null); setShowCreateModal(true); }}
               className="game-btn game-btn-blue mt-3 inline-flex items-center gap-1.5"
@@ -376,9 +383,11 @@ export default function Chores() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filteredChores.map((chore) => {
-            const kidStatus = isKid ? assignmentStatusMap[chore.id] : null;
+            const kidStatus = assignmentStatusMap[chore.id];
             const isDone = kidStatus === 'completed' || kidStatus === 'verified';
-            const isPending = isKid && (kidStatus === 'pending' || kidStatus === 'assigned');
+            const isUnlimited = chore.recurrence === 'unlimited';
+            const completionCount = assignmentCountMap[chore.id] || 0;
+            const isPending = isUnlimited || kidStatus === 'pending' || kidStatus === 'assigned';
             const isCompleting = completingId === chore.id;
             const assignCount = chore.assignment_count || 0;
 
@@ -386,7 +395,7 @@ export default function Chores() {
               <div
                 key={chore.id}
                 className={`game-panel p-3 flex flex-col gap-2 cursor-pointer hover:border-accent/40 transition-colors ${
-                  isDone ? 'opacity-50' : ''
+                  isDone && !isUnlimited ? 'opacity-50' : ''
                 }`}
                 onClick={() => {
                   if (isParent && activeTab === 'library' && assignCount === 0) {
@@ -398,10 +407,17 @@ export default function Chores() {
               >
                 {/* Title row */}
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-cream text-sm font-medium flex-1">
-                    {themedTitle(chore.title, colorTheme)}
-                  </h3>
-                  {isParent && (
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <h3 className="text-cream text-sm font-medium truncate">
+                      {themedTitle(chore.title, colorTheme)}
+                    </h3>
+                    {isUnlimited && completionCount > 0 && (
+                      <span className="flex-shrink-0 text-[11px] font-bold text-gold bg-gold/15 border border-gold/30 px-1.5 py-0.5 rounded-full">
+                        ×{completionCount}
+                      </span>
+                    )}
+                  </div>
+                  {(isParent || chore.created_by === user?.id) && (
                     <div className="flex items-center gap-0.5 flex-shrink-0">
                       <button
                         onClick={(e) => {
@@ -533,7 +549,9 @@ export default function Chores() {
                         isCompleting ||
                         (chore.requires_photo && !photoFiles[chore.id])
                       }
-                      className={`game-btn game-btn-blue w-full flex items-center justify-center gap-1.5 ${
+                      className={`game-btn w-full flex items-center justify-center gap-1.5 ${
+                        isUnlimited ? 'game-btn-gold' : 'game-btn-blue'
+                      } ${
                         isCompleting ? 'opacity-60 cursor-wait' : ''
                       } ${
                         chore.requires_photo && !photoFiles[chore.id]
@@ -545,6 +563,11 @@ export default function Chores() {
                         <>
                           <Loader2 size={12} className="animate-spin" />
                           Завершение...
+                        </>
+                      ) : isUnlimited ? (
+                        <>
+                          <Infinity size={12} />
+                          {completionCount > 0 ? `Ещё раз (×${completionCount})` : 'Выполнить'}
                         </>
                       ) : (
                         <>

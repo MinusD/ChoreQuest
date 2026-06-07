@@ -40,6 +40,7 @@ async def init_db():
             ("users", "streak_freezes_used", "INTEGER DEFAULT 0"),
             ("users", "streak_freeze_month", "INTEGER"),
             ("chore_assignments", "feedback", "TEXT"),
+            ("chore_assignments", "completion_count", "INTEGER DEFAULT 0"),
             ("rewards", "category", "VARCHAR(50)"),
             ("achievements", "tier", "VARCHAR(10)"),
             ("achievements", "group_key", "VARCHAR(50)"),

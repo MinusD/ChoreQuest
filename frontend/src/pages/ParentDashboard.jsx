@@ -3,19 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import {
   Flame,
   Star,
-  CheckCircle2,
-  XCircle,
   Plus,
   Loader2,
   AlertTriangle,
   Users,
   Sparkles,
-  Camera,
-  MessageSquare,
-  Send,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react';
-import { useTheme } from '../hooks/useTheme';
-import { themedTitle } from '../utils/questThemeText';
 import { api } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import AvatarDisplay from '../components/AvatarDisplay';
@@ -24,18 +19,13 @@ import Modal from '../components/Modal';
 export default function ParentDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { colorTheme } = useTheme();
 
   const [familyStats, setFamilyStats] = useState([]);
-  const [pendingVerifications, setPendingVerifications] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [actionLoading, setActionLoading] = useState({});
   const [bonusModalOpen, setBonusModalOpen] = useState(false);
-
-  const [feedbackText, setFeedbackText] = useState({});
-  const [feedbackSending, setFeedbackSending] = useState({});
 
   const [bonusKidId, setBonusKidId] = useState('');
   const [bonusAmount, setBonusAmount] = useState('');
@@ -56,10 +46,11 @@ export default function ParentDashboard() {
 
       const today = new Date().toISOString().slice(0, 10);
       const todayAssignments = (calendarRes.days && calendarRes.days[today]) || [];
-      const needsVerification = todayAssignments.filter(
-        (a) => a.status === 'completed'
-      );
-      setPendingVerifications(needsVerification);
+      // Show today's completed quests as activity feed
+      const completed = todayAssignments
+        .filter((a) => a.status === 'verified' || a.status === 'completed')
+        .sort((a, b) => new Date(b.completed_at || 0) - new Date(a.completed_at || 0));
+      setRecentActivity(completed);
     } catch (err) {
       setError(err.message || 'Не удалось загрузить данные семьи');
     } finally {
@@ -76,36 +67,6 @@ export default function ParentDashboard() {
     window.addEventListener('ws:message', handler);
     return () => window.removeEventListener('ws:message', handler);
   }, [fetchData]);
-
-  const setActionBusy = (key, busy) => {
-    setActionLoading((prev) => ({ ...prev, [key]: busy }));
-  };
-
-  const handleVerifyChore = async (choreId) => {
-    const key = `verify-${choreId}`;
-    setActionBusy(key, true);
-    try {
-      await api(`/api/chores/${choreId}/verify`, { method: 'POST' });
-      await fetchData();
-    } catch (err) {
-      setError(err.message || 'Не удалось подтвердить квест');
-    } finally {
-      setActionBusy(key, false);
-    }
-  };
-
-  const handleRejectChore = async (choreId) => {
-    const key = `reject-${choreId}`;
-    setActionBusy(key, true);
-    try {
-      await api(`/api/chores/${choreId}/uncomplete`, { method: 'POST' });
-      await fetchData();
-    } catch (err) {
-      setError(err.message || 'Не удалось отклонить квест');
-    } finally {
-      setActionBusy(key, false);
-    }
-  };
 
   const handleBonusSubmit = async () => {
     setBonusError('');
@@ -141,21 +102,6 @@ export default function ParentDashboard() {
     }
   };
 
-  const handleSendFeedback = async (assignmentId) => {
-    const text = feedbackText[assignmentId]?.trim();
-    if (!text) return;
-    setFeedbackSending(prev => ({ ...prev, [assignmentId]: true }));
-    try {
-      await api(`/api/chores/assignments/${assignmentId}/feedback`, {
-        method: 'POST',
-        body: { feedback: text },
-      });
-      setFeedbackText(prev => ({ ...prev, [assignmentId]: '' }));
-    } catch { /* ignore */ } finally {
-      setFeedbackSending(prev => ({ ...prev, [assignmentId]: false }));
-    }
-  };
-
   function ProgressBar({ completed, total }) {
     const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
     return (
@@ -176,15 +122,11 @@ export default function ParentDashboard() {
     );
   }
 
-  const hasPendingItems = pendingVerifications.length > 0;
-
   return (
     <div className="max-w-3xl mx-auto space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-cream text-lg font-semibold">
-          Обзор семьи
-        </h1>
+        <h1 className="text-cream text-lg font-semibold">Обзор семьи</h1>
         <div className="flex items-center gap-1.5 text-muted text-sm">
           <Users size={14} />
           <span>{familyStats.length} участников</span>
@@ -199,41 +141,39 @@ export default function ParentDashboard() {
         </div>
       )}
 
-      {/* Kid overview cards */}
+      {/* Family member cards */}
       {familyStats.length === 0 ? (
         <div className="game-panel p-8 text-center">
-          <p className="text-muted text-sm">
-            В вашей семье пока нет детей.
-          </p>
+          <p className="text-muted text-sm">В вашей семье пока никого нет.</p>
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
-          {familyStats.map((kid) => (
+          {familyStats.map((member) => (
             <div
-              key={kid.id}
+              key={member.id}
               className="game-panel p-4 cursor-pointer hover:border-accent/40 transition-colors"
-              onClick={() => navigate(`/kids/${kid.id}`)}
+              onClick={() => navigate(`/kids/${member.id}`)}
             >
               <div className="flex items-center gap-3 mb-3">
                 <AvatarDisplay
-                  config={kid.avatar_config}
+                  config={member.avatar_config}
                   size="md"
-                  name={kid.display_name}
+                  name={member.display_name}
                   animate
                 />
                 <div className="min-w-0 flex-1">
                   <h3 className="text-cream text-sm font-medium truncate">
-                    {kid.display_name}
+                    {member.display_name}
                   </h3>
                   <div className="flex items-center gap-3 mt-1">
                     <span className="inline-flex items-center gap-1 text-gold text-xs font-medium">
                       <Star size={11} fill="currentColor" />
-                      {kid.points_balance.toLocaleString()} XP
+                      {member.points_balance.toLocaleString()} XP
                     </span>
-                    {kid.current_streak > 0 && (
+                    {member.current_streak > 0 && (
                       <span className="inline-flex items-center gap-1 text-orange-400 text-xs font-medium">
                         <Flame size={11} fill="currentColor" />
-                        {kid.current_streak}
+                        {member.current_streak}
                       </span>
                     )}
                   </div>
@@ -244,12 +184,12 @@ export default function ParentDashboard() {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted">Сегодня</span>
                   <span className="text-cream font-medium">
-                    {kid.today_completed}/{kid.today_total} квестов
+                    {member.today_completed}/{member.today_total} квестов
                   </span>
                 </div>
                 <ProgressBar
-                  completed={kid.today_completed}
-                  total={kid.today_total}
+                  completed={member.today_completed}
+                  total={member.today_total}
                 />
               </div>
             </div>
@@ -257,112 +197,34 @@ export default function ParentDashboard() {
         </div>
       )}
 
-      {/* Pending Verifications */}
-      {hasPendingItems && (
+      {/* Recent activity feed */}
+      {recentActivity.length > 0 && (
         <section>
-          <h2 className="text-cream text-sm font-semibold mb-2">
-            Ожидают проверки
+          <h2 className="text-cream text-sm font-semibold mb-2 flex items-center gap-2">
+            <CheckCircle2 size={14} className="text-emerald" />
+            Активность сегодня
           </h2>
-
           <div className="space-y-2">
-            {pendingVerifications.map((assignment) => {
-              const verifyKey = `verify-${assignment.chore_id}`;
-              const rejectKey = `reject-${assignment.chore_id}`;
-              const isVerifying = actionLoading[verifyKey];
-              const isRejecting = actionLoading[rejectKey];
-              const isBusy = isVerifying || isRejecting;
-
-              return (
-                <div
-                  key={`chore-${assignment.id}`}
-                  className="game-panel p-3"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <p
-                        className="text-cream text-sm font-medium truncate cursor-pointer hover:text-accent transition-colors"
-                        onClick={() => navigate(`/chores/${assignment.chore_id}`)}
-                      >
-                        {themedTitle(assignment.chore?.title || 'Задание', colorTheme)}
-                      </p>
-                      <p className="text-muted text-xs mt-0.5">
-                        от {assignment.user?.display_name || 'Ребёнок'}
-                        {assignment.chore?.requires_photo && (
-                          <span className="inline-flex items-center gap-1 ml-2 text-accent">
-                            <Camera size={10} /> Фото
-                          </span>
-                        )}
-                        <span className="ml-2 text-gold font-medium">+{assignment.chore?.points} XP</span>
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <button
-                        className="game-btn game-btn-blue !px-2.5 !py-1.5"
-                        disabled={isBusy}
-                        onClick={() => handleVerifyChore(assignment.chore_id)}
-                        title="Одобрить"
-                      >
-                        {isVerifying ? (
-                          <Loader2 size={14} className="animate-spin" />
-                        ) : (
-                          <CheckCircle2 size={14} />
-                        )}
-                      </button>
-                      <button
-                        className="game-btn game-btn-red !px-2.5 !py-1.5"
-                        disabled={isBusy}
-                        onClick={() => handleRejectChore(assignment.chore_id)}
-                        title="Отклонить"
-                      >
-                        {isRejecting ? (
-                          <Loader2 size={14} className="animate-spin" />
-                        ) : (
-                          <XCircle size={14} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  {assignment.photo_proof_path && (
-                    <div className="mt-2">
-                      <img
-                        src={`/api/uploads/${assignment.photo_proof_path}`}
-                        alt="Фото-подтверждение"
-                        className="rounded-md max-h-48 object-cover border border-border"
-                      />
-                    </div>
-                  )}
-
-                  <div className="mt-2 flex items-center gap-2">
-                    <MessageSquare size={12} className="text-muted flex-shrink-0" />
-                    <input
-                      type="text"
-                      value={feedbackText[assignment.id] || ''}
-                      onChange={e => setFeedbackText(prev => ({ ...prev, [assignment.id]: e.target.value }))}
-                      placeholder="Оставить отзыв..."
-                      maxLength={500}
-                      className="field-input !py-1.5 !text-xs flex-1"
-                    />
-                    <button
-                      onClick={() => handleSendFeedback(assignment.id)}
-                      disabled={feedbackSending[assignment.id] || !feedbackText[assignment.id]?.trim()}
-                      className="game-btn game-btn-blue !py-1.5 !px-2 flex-shrink-0"
-                      title="Отправить отзыв"
-                    >
-                      {feedbackSending[assignment.id] ? (
-                        <Loader2 size={12} className="animate-spin" />
-                      ) : (
-                        <Send size={12} />
-                      )}
-                    </button>
-                  </div>
-                  {assignment.feedback && (
-                    <p className="mt-1.5 ml-5 text-muted text-xs italic">
-                      Отзыв: {assignment.feedback}
-                    </p>
-                  )}
+            {recentActivity.map((assignment) => (
+              <div key={assignment.id} className="game-panel p-3 flex items-center gap-3">
+                <CheckCircle2 size={16} className="text-emerald flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-cream text-sm font-medium truncate">
+                    {assignment.chore?.title || 'Квест'}
+                  </p>
+                  <p className="text-muted text-xs">
+                    {assignment.user?.display_name || 'Участник'}
+                    <span className="ml-2 text-gold font-medium">+{assignment.chore?.points} XP</span>
+                  </p>
                 </div>
-              );
-            })}
+                {assignment.completed_at && (
+                  <span className="text-muted text-xs flex items-center gap-1 flex-shrink-0">
+                    <Clock size={10} />
+                    {new Date(assignment.completed_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </section>
       )}

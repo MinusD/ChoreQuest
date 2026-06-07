@@ -6,7 +6,9 @@ import Modal from './Modal';
 import {
   BookTemplate,
   Star,
-  Scroll,
+  Repeat,
+  Zap,
+  Infinity,
 } from 'lucide-react';
 
 const DIFFICULTY_OPTIONS = [
@@ -26,6 +28,7 @@ const emptyForm = {
   points: 10,
   difficulty: 'easy',
   category_id: '',
+  recurrence: 'once',
 };
 
 export default function QuestCreateModal({
@@ -51,6 +54,7 @@ export default function QuestCreateModal({
           points: editingChore.points || 10,
           difficulty: editingChore.difficulty || 'easy',
           category_id: editingChore.category_id ? String(editingChore.category_id) : '',
+          recurrence: ['daily', 'unlimited'].includes(editingChore.recurrence) ? editingChore.recurrence : 'once',
         });
       } else {
         setForm({ ...emptyForm });
@@ -109,8 +113,7 @@ export default function QuestCreateModal({
       points: Number(form.points),
       difficulty: form.difficulty,
       category_id: Number(form.category_id),
-      // New quests from this flow don't set recurrence/photo on the chore itself
-      recurrence: 'once',
+      recurrence: form.recurrence,
       requires_photo: false,
       assigned_user_ids: [],
     };
@@ -292,6 +295,60 @@ export default function QuestCreateModal({
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Quest type */}
+        <div>
+          <label className="block text-cream text-sm font-medium mb-2 tracking-wide">
+            Тип квеста
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => updateForm('recurrence', 'once')}
+              className={`flex flex-col items-center gap-1 p-3 rounded-lg border text-sm font-medium transition-all ${
+                form.recurrence === 'once'
+                  ? 'border-accent bg-accent/15 text-accent'
+                  : 'border-border bg-surface-raised/30 text-muted hover:border-border-light hover:text-cream'
+              }`}
+            >
+              <Zap size={15} />
+              <div className="text-center">
+                <div>Одноразовый</div>
+                <div className="text-[10px] font-normal opacity-70">Один раз</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => updateForm('recurrence', 'daily')}
+              className={`flex flex-col items-center gap-1 p-3 rounded-lg border text-sm font-medium transition-all ${
+                form.recurrence === 'daily'
+                  ? 'border-emerald bg-emerald/15 text-emerald'
+                  : 'border-border bg-surface-raised/30 text-muted hover:border-border-light hover:text-cream'
+              }`}
+            >
+              <Repeat size={15} />
+              <div className="text-center">
+                <div>Постоянный</div>
+                <div className="text-[10px] font-normal opacity-70">Каждый день</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => updateForm('recurrence', 'unlimited')}
+              className={`flex flex-col items-center gap-1 p-3 rounded-lg border text-sm font-medium transition-all ${
+                form.recurrence === 'unlimited'
+                  ? 'border-gold bg-gold/15 text-gold'
+                  : 'border-border bg-surface-raised/30 text-muted hover:border-border-light hover:text-cream'
+              }`}
+            >
+              <Infinity size={15} />
+              <div className="text-center">
+                <div>Вечный</div>
+                <div className="text-[10px] font-normal opacity-70">Сколько угодно</div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </Modal>

@@ -133,6 +133,7 @@ class AssignmentResponse(BaseModel):
     verified_by: int | None
     photo_proof_path: str | None
     feedback: str | None = None
+    completion_count: int = 0
     chore: ChoreResponse | None = None
     user: UserResponse | None = None
 
